@@ -19,6 +19,6 @@ namespace Tene.Core.DTOs
         public bool FromElevator { get; set; }
         public bool ToElevator { get; set; }
         public DateTime Date { get; set; }
-        public List<ProductsDTO> Products { get; set; } = new List<ProductsDTO>();
+        public List<ProductsFromUserDTO> Products { get; set; } = new List<ProductsFromUserDTO>();
     }
 }

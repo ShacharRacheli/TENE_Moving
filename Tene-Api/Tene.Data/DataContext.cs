@@ -11,10 +11,11 @@ namespace Tene.Data
     public class DataContext:DbContext
     {
         public DbSet<RequestDetails> RequestsDetails { get; set; }
-        public DbSet<Products> Products { get; set; } // Add Products DbSet
+        public DbSet<ProductsFromUser> ProductsFromUser { get; set; } // Add Products DbSet
+        public DbSet<ProductDetails> ProductsDetails { get; set; } // Add Products DbSet
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Products>()
+            modelBuilder.Entity<ProductsFromUser>()
                 .HasOne(p => p.RequestDetails)
                 .WithMany(rd => rd.Products)
                 .HasForeignKey(p => p.RequestDetailsId);

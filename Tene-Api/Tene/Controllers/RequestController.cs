@@ -13,7 +13,7 @@ namespace Tene.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-       private readonly IRequestService _requestService ;
+       private readonly IRequestService _requestService;
         private readonly IMapper _mapper;
 
         public RequestController(IRequestService requestService,IMapper mapper)
@@ -34,17 +34,5 @@ namespace Tene.Controllers
             return result ? Ok("Request added successfully.") : StatusCode(500, "An error occurred.");
 
         }
-
-        //// PUT api/<RequestController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<RequestController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

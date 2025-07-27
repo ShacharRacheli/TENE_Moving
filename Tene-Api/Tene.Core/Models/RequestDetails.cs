@@ -21,6 +21,6 @@ namespace Tene.Core.Models
         public bool FromElevator { get; set; }
         public bool ToElevator { get; set; }
         public DateTime Date { get; set; }
-        public List<Products> Products { get; set; } = new List<Products>();
+        public List<ProductsFromUser> Products { get; set; } = new List<ProductsFromUser>();
     }
 }

@@ -1,4 +1,6 @@
 
+using Comp.Core.IServices;
+using Comp.Service.Services;
 using Tene.Core;
 using Tene.Core.IRepositories;
 using Tene.Core.IServices;
@@ -22,6 +24,7 @@ namespace Tene
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IRequestRepository, RequestRepository>();
             builder.Services.AddScoped<IRequestService, RequestService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddDbContext<DataContext>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddCors();

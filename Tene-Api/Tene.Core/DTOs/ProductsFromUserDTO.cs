@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tene.Core.DTOs
 {
-    public class ProductsDTO
+    public class ProductsFromUserDTO
     {
-        public string ProductId { get; set; }
+        public string ProductName { get; set; }
         public int Amount { get; set; }
     }
 }

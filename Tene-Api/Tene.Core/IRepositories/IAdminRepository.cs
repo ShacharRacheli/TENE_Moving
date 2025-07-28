@@ -11,5 +11,9 @@ namespace Tene.Core.IRepositories
     {
         Task<IEnumerable<ProductDetails>> GetAllProductsWithCategoryAsync();
         Task<bool> AddProductAsync(ProductDetails product);
+        Task<ProductDetails> GetByIdAsync(int id);//////////////
+        Task<bool> UpdateProductAsync(ProductDetails product);/////////////////////
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+
     }
 }

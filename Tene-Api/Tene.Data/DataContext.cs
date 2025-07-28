@@ -13,6 +13,7 @@ namespace Tene.Data
         public DbSet<RequestDetails> RequestsDetails { get; set; }
         public DbSet<ProductsFromUser> ProductsFromUser { get; set; } // Add Products DbSet
         public DbSet<ProductDetails> ProductsDetails { get; set; } // Add Products DbSet
+        public DbSet<Category> Category { get; set; } // Add Products DbSet
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductsFromUser>()

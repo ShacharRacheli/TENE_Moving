@@ -12,5 +12,15 @@ namespace Tene.Core.IServices
     {
         Task<IEnumerable<ProductDetailsDTO>> GetAllProductsAsync();
         Task<bool> AddNewProductAsync(ProductDetails product);
+        /// <summary>
+        /// ////////////////
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ProductDetails> GetByIdAsync(int id);
+        Task<bool> UpdateProductAsync(ProductDetails product);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+
+
     }
 }

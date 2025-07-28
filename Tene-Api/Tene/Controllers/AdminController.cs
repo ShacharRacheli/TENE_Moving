@@ -42,5 +42,33 @@ namespace Tene.Controllers
             return BadRequest();////////////??????????????????????
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDetailsDTO dto)
+        {
+            var product = await _adminService.GetByIdAsync(id);
+            if (product == null) return NotFound();
+
+            // Update values manually or via mapper
+            product.Id = id;
+            product.ProductName = dto.ProductName;
+            product.Cob = dto.Cob;
+            product.CategoryId = dto.CategoryId;
+
+
+            if (await _adminService.UpdateProductAsync(product))
+                return Ok();
+
+            return BadRequest();
+        }
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAllCategories()
+        {
+            var categories = await _adminService.GetAllCategoriesAsync();
+            var categoriesDto = _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+
+            return Ok(categoriesDto);
+        }
+
+
     }
 }

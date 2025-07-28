@@ -17,6 +17,7 @@ namespace Tene.Core
             CreateMap<RequestDetailsDTO, RequestDetails>().ReverseMap();
             CreateMap<ProductsFromUserDTO, ProductsFromUser>().ReverseMap();
             CreateMap<ProductDetailsDTO, ProductDetails>().ReverseMap();
+            CreateMap<CategoryDTO, Category>().ReverseMap();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Tene.Service.Services
             {
                 ProductName = p.ProductName,
                 Cob = p.Cob,
-                CategoryName = p.Category.CategoryName
+                CategoryId = p.CategoryId
             });
         }
 
@@ -35,5 +35,22 @@ namespace Tene.Service.Services
         {
             return await _adminRepository.AddProductAsync(product);
         }
+
+        //////////////////////////
+        ///
+        public async Task<ProductDetails> GetByIdAsync(int id)
+        {
+            return await _adminRepository.GetByIdAsync(id);
+        }
+
+        public async Task<bool> UpdateProductAsync(ProductDetails product)
+        {
+            return await _adminRepository.UpdateProductAsync(product);
+        }
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _adminRepository.GetAllCategoriesAsync();
+        }
+
     }
 }

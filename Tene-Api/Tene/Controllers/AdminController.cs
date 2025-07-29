@@ -50,14 +50,18 @@ namespace Tene.Controllers
             var product = _mapper.Map<ProductDetails>(dto);
 
             if (await _adminService.AddNewProductAsync(product))
+                { 
+                Console.WriteLine("Update success");
                 return Ok();
+            }
+            Console.WriteLine("Update failed");
+
             return BadRequest();////////////??????????????????????
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDetailsUpdateAddDTO dto)
         {
-            Console.WriteLine($"Received: {dto.ProductName}, {dto.Cob}, {dto.CategoryId}");
 
             var product = await _adminService.GetByIdAsync(id);
             if (product == null) return NotFound();
@@ -70,9 +74,7 @@ namespace Tene.Controllers
 
             if (await _adminService.UpdateProductAsync(id,productToUpdate))
             {
-                Console.WriteLine("Update success");
                 return Ok(); }
-            Console.WriteLine("Update failed");
 
             return BadRequest();
         }

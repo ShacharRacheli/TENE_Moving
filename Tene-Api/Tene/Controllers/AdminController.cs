@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Share.Helper;
 using Tene.Core.DTOs;
 using Tene.Core.IServices;
 using Tene.Core.Models;
@@ -20,14 +21,25 @@ namespace Tene.Controllers
             _adminService = adminService;
             _mapper = mapper;
         }
-        [HttpGet]
+
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginAdmin([FromBody] AdminLogin admin)
+        {
+            if (admin.Email == "r@r" && admin.Password == "12345")
+            {
+                var token = Jwt.GenerateJwtToken(admin);
+                return Ok(new { token });
+            }
+            return Unauthorized("Invalid credentials");
+        }
+        [HttpGet] 
         public async Task<ActionResult<IEnumerable<ProductDetailsDTO>>> GetAllProducts()
         {
             var products = await _adminService.GetAllProductsAsync();
 
-            var productDtos = _mapper.Map<IEnumerable<ProductDetailsDTO>>(products);
+            //var productDtos = _mapper.Map<IEnumerable<ProductDetailsDTO>>(products);
 
-            return Ok(productDtos);
+            return Ok(products);
         }
 
         [HttpPost]
@@ -43,20 +55,24 @@ namespace Tene.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDetailsDTO dto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDetailsUpdateAddDTO dto)
         {
+            Console.WriteLine($"Received: {dto.ProductName}, {dto.Cob}, {dto.CategoryId}");
+
             var product = await _adminService.GetByIdAsync(id);
             if (product == null) return NotFound();
+            var productToUpdate = _mapper.Map<ProductDetails>(dto);
+            productToUpdate.Id = id;
+            //product.ProductName = dto.ProductName;
+            //product.Cob = dto.Cob;
+            //product.CategoryId = dto.CategoryId;
 
-            // Update values manually or via mapper
-            product.Id = id;
-            product.ProductName = dto.ProductName;
-            product.Cob = dto.Cob;
-            product.CategoryId = dto.CategoryId;
 
-
-            if (await _adminService.UpdateProductAsync(product))
-                return Ok();
+            if (await _adminService.UpdateProductAsync(id,productToUpdate))
+            {
+                Console.WriteLine("Update success");
+                return Ok(); }
+            Console.WriteLine("Update failed");
 
             return BadRequest();
         }
@@ -68,7 +84,13 @@ namespace Tene.Controllers
 
             return Ok(categoriesDto);
         }
-
+        [HttpPost("addCategory")]
+        public async Task<ActionResult> AddCategory([FromBody] string category)
+        {
+           if( await _adminService.AddNewCategoryAsync(category))
+                return Ok();
+           return BadRequest();
+        }
 
     }
 }

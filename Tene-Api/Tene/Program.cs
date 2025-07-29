@@ -1,6 +1,3 @@
-
-using Comp.Core.IServices;
-using Comp.Service.Services;
 using Tene.Core;
 using Tene.Core.IRepositories;
 using Tene.Core.IServices;

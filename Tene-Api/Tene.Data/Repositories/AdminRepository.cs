@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tene.Core.DTOs;
 using Tene.Core.IRepositories;
 using Tene.Core.Models;
 
 namespace Tene.Data.Repositories
 {
-    public class AdminRepository: IAdminRepository
+    public class AdminRepository : IAdminRepository
     {
         private readonly DataContext _dataContext;
 
@@ -21,8 +22,17 @@ namespace Tene.Data.Repositories
         public async Task<IEnumerable<ProductDetails>> GetAllProductsWithCategoryAsync()
         {
             return await _dataContext.ProductsDetails
-                .Include(p => p.Category)
-                .ToListAsync();
+           .Include(p => p.Category)
+           .ToListAsync();
+
+            //return products.Select(p => new ProductDetailsDTO
+            //{
+            //    Id = p.Id,
+            //    ProductName = p.ProductName,
+            //    Cob = p.Cob,
+            //    CategoryId = p.CategoryId,
+            //    CategoryName = p.Category.CategoryName // <-- this must be included
+            //});
         }
 
         public async Task<bool> AddProductAsync(ProductDetails product)
@@ -37,22 +47,29 @@ namespace Tene.Data.Repositories
             return await _dataContext.ProductsDetails.FindAsync(id);
         }
 
-        public async Task<bool> UpdateProductAsync(ProductDetails product)
+        public async Task<bool> UpdateProductAsync(int id, ProductDetails product)
         {
-           var tempProduct=await _dataContext.ProductsDetails.FirstOrDefaultAsync(p=>p.Id==product.Id);
-            if (tempProduct != null) { 
-            tempProduct.CategoryId = product.CategoryId;
+            var tempProduct = await _dataContext.ProductsDetails.FirstOrDefaultAsync(p => p.Id == id);
+            if (tempProduct != null)
+            {
+                tempProduct.CategoryId = product.CategoryId;
                 tempProduct.ProductName = product.ProductName;
-                tempProduct.Cob=product.Cob;
-                    await _dataContext.SaveChangesAsync();
-            return true;
+                tempProduct.Cob = product.Cob;
+                await _dataContext.SaveChangesAsync();
+                return true;
             }
             return false;
         }
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            
+
             return await _dataContext.Category.ToListAsync();
+        }
+        public async Task<bool> AddNewCategoryAsync(string category)
+        {
+            var newCategory = new Category { CategoryName = category };
+            await _dataContext.Category.AddAsync(newCategory);
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
     }

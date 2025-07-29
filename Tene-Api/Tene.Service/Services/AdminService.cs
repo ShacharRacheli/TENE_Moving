@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,22 +14,24 @@ namespace Tene.Service.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
+        private readonly IMapper _mapper;
 
-        public AdminService(IAdminRepository adminRepository)
+        public AdminService(IAdminRepository adminRepository,IMapper mapper)
         {
             _adminRepository = adminRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ProductDetailsDTO>> GetAllProductsAsync()
         {
             var products =await _adminRepository.GetAllProductsWithCategoryAsync();
-
-            return products.Select(p => new ProductDetailsDTO
-            {
-                ProductName = p.ProductName,
-                Cob = p.Cob,
-                CategoryId = p.CategoryId
-            });
+            return _mapper.Map<IEnumerable<ProductDetailsDTO>>(products);
+            //return products.Select(p => new ProductDetailsDTO
+            //{
+            //    ProductName = p.ProductName,
+            //    Cob = p.Cob,
+            //    CategoryId = p.CategoryId
+            //});
         }
 
         public async Task<bool> AddNewProductAsync(ProductDetails product)
@@ -43,13 +46,17 @@ namespace Tene.Service.Services
             return await _adminRepository.GetByIdAsync(id);
         }
 
-        public async Task<bool> UpdateProductAsync(ProductDetails product)
+        public async Task<bool> UpdateProductAsync(int id,ProductDetails product)
         {
-            return await _adminRepository.UpdateProductAsync(product);
+            return await _adminRepository.UpdateProductAsync(id,product);
         }
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _adminRepository.GetAllCategoriesAsync();
+        }
+        public async Task<bool> AddNewCategoryAsync(string category)
+        {
+            return await _adminRepository.AddNewCategoryAsync(category);
         }
 
     }

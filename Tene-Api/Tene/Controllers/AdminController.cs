@@ -43,7 +43,7 @@ namespace Tene.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewProduct([FromBody] ProductDetailsDTO dto)
+        public async Task<IActionResult> AddNewProduct([FromBody] ProductDetailsUpdateAddDTO dto)
         {
             if (dto == null) return BadRequest();
 

@@ -181,28 +181,37 @@ const prepareProductsArray = () => {
           {steps.map((step, index) => (
             <Step key={step.label}>
               <StepLabel
-                StepIconComponent={({ active, completed }) => (
+        StepIconComponent={() => (
                   <Box
-                    sx={{
+                    component="button"
+            type="button"
+ onClick={() => {
+              if (index < activeStep) setActiveStep(index);
+            }}
+            disabled={index >= activeStep}
+                         sx={{
                       width: 40,
                       height: 40,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      bgcolor: active || completed ? "#2d7d7d" : "#e0e0e0",
-                      color: active || completed ? "white" : "#666",
+                        bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
+              color: activeStep === index ? "white" : "#666",
+              border: "none",
+              cursor: "pointer",
+              p: 0,
                     }}
                   >
                     {step.icon}
                   </Box>
                 )}
               >
-                <Typography sx={{ fontWeight: activeStep === index ? "bold" : "normal" }}>{step.label}</Typography>
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+                  <Typography sx={{ fontWeight: activeStep === index ? "bold" : "normal" }}>{step.label}</Typography>
+      </StepLabel>
+    </Step>
+  ))}
+</Stepper>
 
         <Card sx={{ minHeight: 400, bgcolor: "#fafafa" }}>
           <CardContent sx={{ p: 4 }}>{renderStepContent()}</CardContent>

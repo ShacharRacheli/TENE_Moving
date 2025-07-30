@@ -1,60 +1,89 @@
-
-// import React, { useEffect, useState } from "react"
+// import  { useEffect, useState } from "react"
 // import {
-//   Box,
-//   Button,
-//   Card,
-//   CardContent,
-//   Container,
-//   Dialog,
-//   DialogContent,
-//   DialogTitle,
-//   Fab,
-//   Grid,
-//   IconButton,
-//   Typography,
+//   Box, Button, Card, CardContent, Container, Dialog,
+//   DialogContent, DialogTitle, Grid, IconButton, Typography
 // } from "@mui/material"
 // import {
 //   Add as PlusIcon,
 //   Close as CloseIcon,
-//   Remove as MinusIcon,
+//   Remove as MinusIcon
 // } from "@mui/icons-material"
 
-// import type { UseFormReturn } from "react-hook-form"
-// import type { MovingDetailsType } from "../../store/formSlice"
+// import { useDispatch, useSelector } from "react-redux"
+// import {
+//   updateProduct,
+//   removeProduct,
+//   type ProductSelection
+// } from "../../store/formSlice"
+
 // import { categories, type Category, type Product } from "./categoriesPages/categoryData"
+// import type { RootState } from "../../store/store"
 
 // export default function CategoriesInfo({
 //   onProductsChange,
 // }: {
 //   onProductsChange: (products: Record<string, number>) => void;
-// }) {
+//   }) {
+//   const dispatch = useDispatch()
+//   const formState = useSelector((state: RootState) => state.form)
 //   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
-//   const [productQuantities, setProductQuantities] = useState<Record<string, number>>({})
-// useEffect(() => {
-//   onProductsChange(productQuantities);
-// }, [productQuantities]);
-//   const updateQuantity = (productId: string, change: number) => {
-//     setProductQuantities((prev) => ({
-//       ...prev,
-//       [productId]: Math.max(0, (prev[productId] || 0) + change),
-//     }))
+//   const getInitialQuantities = (): Record<string, number> => {
+//     const map: Record<string, number> = {}
+//     formState.categories?.forEach(category => {
+//       category.products.forEach(product => {
+//         map[product.productId] = product.quantity
+//       })
+//     })
+//     return map
 //   }
 
-//   const handleCloseDialog = () => {
-//     setSelectedCategory(null)
+  
+  
+//   const [productQuantities, setProductQuantities] = useState<Record<string, number>>(getInitialQuantities())
+
+//     useEffect(() => {
+//     onProductsChange(productQuantities)
+//     }, [productQuantities, onProductsChange])
+  
+//   const updateQuantity = (product: Product, change: number) => {
+//     const newQuantity = Math.max(0, (productQuantities[product.id] || 0) + change)
+
+//     setProductQuantities(prev => ({
+//       ...prev,
+//       [product.id]: newQuantity
+//     }))
+//      if (!selectedCategory) return
+
+//     if (newQuantity === 0) {
+//       dispatch(removeProduct({ categoryId: selectedCategory.id, productId: product.id }))
+//     } else {
+//       dispatch(updateProduct({
+//         categoryId: selectedCategory.id,
+//         product: {
+//           productId: product.id,
+//           quantity: newQuantity
+//         }
+//       }))
+//     }
 //   }
+  
+//   const handleCloseDialog = () => setSelectedCategory(null)
 
 //   const handleResetCategory = () => {
-//     const categoryProductIds = selectedCategory?.products.map((p) => p.id) || []
-//     setProductQuantities((prev) => {
-//       const newQuantities = { ...prev }
-//       categoryProductIds.forEach((id) => {
-//         delete newQuantities[id]
-//       })
-//       return newQuantities
+//     if (!selectedCategory) return
+//     const productIds = selectedCategory.products.map(p => p.id)
+
+//     setProductQuantities(prev => {
+//       const copy = { ...prev }
+//       productIds.forEach(id => delete copy[id])
+//       return copy
+//     })
+
+//     productIds.forEach(productId => {
+//       dispatch(removeProduct({ categoryId: selectedCategory.id, productId }))
 //     })
 //   }
+
 
 //   return (
 //     <Box sx={{ minHeight: "100vh", backgroundColor: "white", padding: 2, direction: "rtl" }}>
@@ -69,7 +98,7 @@
 //         </Typography>
 
 //         <Grid container spacing={2} sx={{ mb: 4 }}>
-//           {categories.map((category) => (
+//           {categories.map((category:Category) => (
 //               <Grid size={{ xs: 12, sm: 6, md:3} } key={category.id}>
 //               <Card
 //                 sx={{
@@ -140,7 +169,7 @@
 //                       >
 //                         <IconButton
 //                           size="small"
-//                           onClick={() => updateQuantity(product.id, -1)}
+//                           onClick={() => updateQuantity(product, -1)}
 //                           disabled={!productQuantities[product.id]}
 //                           sx={{ border: "1px solid #ccc" }}
 //                         >
@@ -153,7 +182,7 @@
 
 //                         <IconButton
 //                           size="small"
-//                           onClick={() => updateQuantity(product.id, 1)}
+//                           onClick={() => updateQuantity(product, 1)}
 //                           sx={{ border: "1px solid #ccc" }}
 //                         >
 //                           <PlusIcon />
@@ -179,10 +208,7 @@
 //     </Box>
 //   )
 // }
-
-
-
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Box, Button, Card, CardContent, Container, Dialog,
   DialogContent, DialogTitle, Grid, IconButton, Typography
@@ -194,24 +220,36 @@ import {
 } from "@mui/icons-material"
 
 import { useDispatch, useSelector } from "react-redux"
-// import { RootState } from "../../store"
 import {
   updateProduct,
-  removeProduct,
-  type ProductSelection
+  removeProduct
 } from "../../store/formSlice"
 
-import { categories, type Category, type Product } from "./categoriesPages/categoryData"
 import type { RootState } from "../../store/store"
+
+interface Product {
+  id: string
+  productName: string
+}
+
+interface Category {
+  id: number
+  categoryName: string
+  icon?: React.ReactNode
+  products: Product[]
+}
 
 export default function CategoriesInfo({
   onProductsChange,
 }: {
-  onProductsChange: (products: Record<string, number>) => void;
-  }) {
+  onProductsChange: (products: Record<string, number>) => void
+}) {
   const dispatch = useDispatch()
   const formState = useSelector((state: RootState) => state.form)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
+
+  // Initialize quantities from Redux form state
   const getInitialQuantities = (): Record<string, number> => {
     const map: Record<string, number> = {}
     formState.categories?.forEach(category => {
@@ -222,28 +260,43 @@ export default function CategoriesInfo({
     return map
   }
 
-  
-  
   const [productQuantities, setProductQuantities] = useState<Record<string, number>>(getInitialQuantities())
 
-    useEffect(() => {
+  // Fetch categories + products from backend on mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:5180/api/Product/products-by-category")
+        const data = await response.json()
+        setCategories(data)
+      } catch (error) {
+        console.error("Failed to fetch categories:", error)
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
+  // Update parent with product quantities
+  useEffect(() => {
     onProductsChange(productQuantities)
-    }, [productQuantities, onProductsChange])
-  
+  }, [productQuantities, onProductsChange])
+
+  // Update quantity (and dispatch to redux)
   const updateQuantity = (product: Product, change: number) => {
     const newQuantity = Math.max(0, (productQuantities[product.id] || 0) + change)
-
     setProductQuantities(prev => ({
       ...prev,
       [product.id]: newQuantity
     }))
-     if (!selectedCategory) return
+
+    if (!selectedCategory) return
 
     if (newQuantity === 0) {
-      dispatch(removeProduct({ categoryId: selectedCategory.id, productId: product.id }))
+      dispatch(removeProduct({ categoryId: selectedCategory.id.toString(), productId: product.id }))
     } else {
       dispatch(updateProduct({
-        categoryId: selectedCategory.id,
+        categoryId: selectedCategory.id.toString(),
         product: {
           productId: product.id,
           quantity: newQuantity
@@ -251,7 +304,7 @@ export default function CategoriesInfo({
       }))
     }
   }
-  
+
   const handleCloseDialog = () => setSelectedCategory(null)
 
   const handleResetCategory = () => {
@@ -265,10 +318,9 @@ export default function CategoriesInfo({
     })
 
     productIds.forEach(productId => {
-      dispatch(removeProduct({ categoryId: selectedCategory.id, productId }))
+      dispatch(removeProduct({ categoryId: selectedCategory.id.toString(), productId }))
     })
   }
-
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "white", padding: 2, direction: "rtl" }}>
@@ -283,15 +335,15 @@ export default function CategoriesInfo({
         </Typography>
 
         <Grid container spacing={2} sx={{ mb: 4 }}>
-          {categories.map((category:Category) => (
-              <Grid size={{ xs: 12, sm: 6, md:3} } key={category.id}>
+          {categories.map((category: Category) => (
+                <Grid size={{xs:12, sm:6 ,md:4 }} key={category.id}>
               <Card
                 sx={{
                   cursor: "pointer",
                   transition: "all 0.2s",
-                  backgroundColor: category.color === "green" ? "#16a085" : "#3498db",
+                  backgroundColor:  "#16a085" ,//: "#3498db",
                   color: "white",
-                  border: `2px solid ${category.color === "green" ? "#16a085" : "#2980b9"}`,
+                  border: `2px solid  "#16a085"`,
                   "&:hover": {
                     transform: "scale(1.05)",
                     boxShadow: 3,
@@ -303,14 +355,13 @@ export default function CategoriesInfo({
                 <CardContent sx={{ textAlign: "center", py: 3 }}>
                   <Box sx={{ mb: 2 }}>{category.icon}</Box>
                   <Typography variant="h6" component="span" fontWeight="semibold">
-                    {category.name}
+                    {category.categoryName}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
-
 
         <Dialog
           open={!!selectedCategory}
@@ -321,7 +372,7 @@ export default function CategoriesInfo({
         >
           <DialogTitle sx={{ textAlign: "center", position: "relative" }}>
             <Typography variant="h4" fontWeight="bold">
-              {selectedCategory?.name}
+              {selectedCategory?.categoryName}
             </Typography>
             <IconButton onClick={handleCloseDialog} sx={{ position: "absolute", left: 8, top: 8 }}>
               <CloseIcon />
@@ -331,7 +382,7 @@ export default function CategoriesInfo({
           <DialogContent>
             <Grid container spacing={2} sx={{ p: 2 }}>
               {selectedCategory?.products.map((product: Product) => (
-                  <Grid size={{ xs: 12, sm:6 ,md: 4} } key={product.id}>
+                <Grid size={{xs:12, sm:6 ,md:4 }} key={product.id}>
                   <Card
                     sx={{
                       height: "100%",
@@ -341,7 +392,7 @@ export default function CategoriesInfo({
                   >
                     <CardContent sx={{ textAlign: "center" }}>
                       <Typography variant="h6" sx={{ mb: 2 }}>
-                        {product.name}
+                        {product.productName}
                       </Typography>
                       <Box
                         sx={{

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import AppLayout from "./components/appLayout";
 import HomePage from "./components/pages/homePage";
 import About from "./components/pages/about";
@@ -14,8 +14,22 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: '/about', element: <About/> },
-            { path: '/sendRequest', element: <MovingDetailsForm/> },
+            // { path: '/sendRequest', element: <MovingDetailsForm/> },
+           {
+        path: "sendRequest",
+        element: <MovingDetailsForm />,
+        children: [
+          { index: true, element: <Navigate to="customer" replace /> },
+          { path: "customer", element: <MovingDetailsForm /> },
+          { path: "moving", element: <MovingDetailsForm /> },
+          { path: "categories", element: <MovingDetailsForm /> },
+          { path: "summary", element: <MovingDetailsForm /> },
+        ],
+      },
+
             { path: '/admin', element: <AdminLogin/> },
+            // { path: '/', element: <AdminLogin/> },
+
             { path: '/adminProductPanel', element: (
     <PrivateRoute>
       <AdminProductPanel />

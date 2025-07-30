@@ -1,116 +1,4 @@
-// // --- React Admin Panel for Product Management ---
-// // Dependencies: axios, react-hook-form, @mui/material, @mui/icons-material
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import {
-//   Box,
-//   Button,
-//   MenuItem,
-//   Paper,
-//   TextField,
-//   Typography,
-//   Table,
-//   TableHead,
-//   TableRow,
-//   TableCell,
-//   TableBody,
-// } from "@mui/material";
-// import { useForm } from "react-hook-form";
-
-// const AdminDashboard = () => {
-//   const [products, setProducts] = useState([]);
-//   const [categories, setCategories] = useState([]);
-//   const [editingId, setEditingId] = useState(null);
-//   const { register, handleSubmit, reset, setValue } = useForm();
-
-//   const loadProducts = async () => {
-//     const res = await axios.get("/api/admin");
-//     setProducts(res.data);
-//   };
-
-//   const loadCategories = async () => {
-//     const res = await axios.get("/api/category");
-//     setCategories(res.data);
-//   };
-
-//   const onSubmit = async (data:any) => {
-//     if (editingId) {
-//       await axios.put(`/api/admin/${editingId}`, data);
-//       setEditingId(null);
-//     } else {
-//       await axios.post("/api/admin", data);
-//     }
-//     reset();
-//     loadProducts();
-//   };
-
-//   const startEdit = (product) => {
-//     setEditingId(product.id);
-//     setValue("productName", product.productName);
-//     setValue("cob", product.cob);
-//     setValue("categoryId", product.categoryId);
-//   };
-
-//   useEffect(() => {
-//     loadProducts();
-//     loadCategories();
-//   }, []);
-
-//   return (
-//     <Paper sx={{ p: 4, m: 4 }}>
-//       <Typography variant="h5" gutterBottom>
-//         Admin Product Panel
-//       </Typography>
-
-//       <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", gap: 16, marginBottom: 32 }}>
-//         <TextField label="Product Name" {...register("productName")} required />
-//         <TextField label="COB" type="number" {...register("cob")} required />
-//         <TextField select label="Category" {...register("categoryId")} required>
-//           {categories.map((cat) => (
-//             <MenuItem key={cat.id} value={cat.id}>
-//               {cat.categoryName}
-//             </MenuItem>
-//           ))}
-//         </TextField>
-//         <Button type="submit" variant="contained">
-//           {editingId ? "Update" : "Add"}
-//         </Button>
-//       </form>
-
-//       <Table>
-//         <TableHead>
-//           <TableRow>
-//             <TableCell>Name</TableCell>
-//             <TableCell>COB</TableCell>
-//             <TableCell>Category</TableCell>
-//             <TableCell>Actions</TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {products.map((prod) => (
-//             <TableRow key={prod.id}>
-//               <TableCell>{prod.productName}</TableCell>
-//               <TableCell>{prod.cob}</TableCell>
-//               <TableCell>{prod.categoryName}</TableCell>
-//               <TableCell>
-//                 <Button onClick={() => startEdit(prod)} variant="outlined">
-//                   Edit
-//                 </Button>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </Paper>
-//   );
-// };
-
-// export default AdminDashboard;
-// --- React Admin Panel for Product Management ---
-// Dependencies: axios, react-hook-form, @mui/material, @mui/icons-material
-
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -183,7 +71,7 @@ const loadProducts = async () => {
     console.log(data);
      const parsedData = {
     ...data,
-    cob: Number(data.cob),
+    cob: parseFloat(String(data.cob)),
     categoryId: Number(data.categoryId)
   };
 
@@ -234,6 +122,10 @@ const handleAddCategory = async () => {
     console.log(categories.map(c=>{console.log(c.categoryName,c.id);}
     ));
   }, []);
+const groupedProducts = categories.map((category) => ({
+  category,
+  products: products.filter(p => p.categoryId === category.id)
+}));
 
   return (
     <Paper sx={{ p: 4, m: 4 }}>
@@ -261,7 +153,9 @@ const handleAddCategory = async () => {
 
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", gap: 16, marginBottom: 32 }}>
         <TextField label="Product Name" {...register("productName")} required />
-        <TextField label="COB" type="number" {...register("cob")} required />
+        <TextField label="COB" type="number"
+  slotProps={{ input: { step: "0.01" }as any }}
+        {...register("cob")} required />
 
         <TextField select 
         label="Category" 
@@ -288,8 +182,37 @@ const handleAddCategory = async () => {
 )}
 
       </form>
+{groupedProducts.map(({ category, products }) => (
+  <Box key={category.id} sx={{ mb: 4 }}>
+    <Typography variant="h6" sx={{ mt: 3, mb: 1, fontWeight: "bold", color: "#333" }}>
+      {category.categoryName}
+    </Typography>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>COB</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {products.map((prod) => (
+          <TableRow key={prod.id}>
+            <TableCell>{prod.productName}</TableCell>
+            <TableCell>{prod.cob}</TableCell>
+            <TableCell>
+              <Button onClick={() => startEdit(prod)} variant="outlined">
+                Edit
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </Box>
+))}
 
-      <Table>
+      {/* <Table>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -312,7 +235,7 @@ const handleAddCategory = async () => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table> */}
     </Paper>
   );
 };

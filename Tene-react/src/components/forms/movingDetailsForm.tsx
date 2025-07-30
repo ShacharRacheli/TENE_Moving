@@ -27,6 +27,7 @@ import MovingInfo from "./movingInfo"
 import CategoriesInfo from "./categoriesInfo"
 import SummaryPage from "./summaryPage"
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router"
 
 const apiUrl = import.meta.env.VITE_APP_API_URL;
 
@@ -49,7 +50,7 @@ const movingDetailsSchema = object({
   toElevator: boolean().default(false),
   moveDate: string().required("תאריך ההובלה הוא שדה חובה"),
 })
-
+const stepRoutes = ["customer", "moving", "categories", "summary"];
 const steps = [
   { label: "פרטי לקוח", icon: <Person /> },
   { label: "מאיפה ולאן מובילים", icon: <LocationOn /> },
@@ -57,43 +58,51 @@ const steps = [
   { label: "סיכום", icon: <CheckCircle /> },
 ]
 export default function MovingDetailsForm() {
+   const location = useLocation();
+  const navigate = useNavigate();
+
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>({})
-const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({});
+  const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({});
 
-const sendFormData = async (data: { products: { productName: string; amount: number }[]; fromAddress: string; toAddress: string; fromFloor: number; toFloor: number; fromElevator: boolean; toElevator: boolean; moveDate: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined } | { products: { productName: string; amount: number }[]; fullName: string; email: string; phone: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined }) => {
-  try {
-    const response = await axios.post("http://localhost:5180/api/Request", data, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error sending form data:");
-    // throw error;
-  }
-};
+  const goToStep = (stepIndex: number) => {
+    navigate(`/sendRequest/${stepRoutes[stepIndex]}`);
+  };
+  const sendFormData = async (data: { products: { productName: string; amount: number }[]; fromAddress: string; toAddress: string; fromFloor: number; toFloor: number; fromElevator: boolean; toElevator: boolean; moveDate: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined } | { products: { productName: string; amount: number }[]; fullName: string; email: string; phone: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined }) => {
+    try {
+      const response = await axios.post("http://localhost:5180/api/Request", data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error sending form data:");
+      // throw error;
+    }
+  };
+useEffect(() => {
+  const currentStep = location.pathname.split("/").pop(); // לדוגמה 'moving'
+  const stepIndex = stepRoutes.indexOf(currentStep || "customer");
+  setActiveStep(stepIndex >= 0 ? stepIndex : 0);
+}, [location.pathname]);
 
-  useEffect(() => {
-    console.log("Step changed to:", activeStep);
-  }, [activeStep]);
   // Step 1: Customer Info
   const customerForm = useForm<CustomerInfoType>({
     resolver: yupResolver(customerInfoSchema),
     defaultValues: formData as CustomerInfoType,
   })
-const defaultValues: MovingDetailsType = {
-  fromAddress: '',
-  toAddress: '',
-  fromFloor: 0,
-  toFloor: 0,
-  fromElevator: false,
-  toElevator: false,
-  moveDate: '',
-}
+  const defaultValues: MovingDetailsType = {
+    fromAddress: '',
+    toAddress: '',
+    fromFloor: 0,
+    toFloor: 0,
+    fromElevator: false,
+    toElevator: false,
+    moveDate: '',
+  }
   // Step 2: Moving Details
   const movingForm = useForm<MovingDetailsType>({
     resolver: yupResolver(movingDetailsSchema),
-  defaultValues,
+    defaultValues,
   })
 
   const getCurrentForm = () => {
@@ -108,12 +117,12 @@ const defaultValues: MovingDetailsType = {
         return customerForm
     }
   }
-const prepareProductsArray = () => {
-  return Object.entries(selectedProducts).map(([productName, amount]) => ({
-    productName,
-    amount,
-  }));
-};
+  const prepareProductsArray = () => {
+    return Object.entries(selectedProducts).map(([productName, amount]) => ({
+      productName,
+      amount,
+    }));
+  };
 
   const handleNext = async () => {
     const currentForm = getCurrentForm()
@@ -124,28 +133,32 @@ const prepareProductsArray = () => {
       setFormData((prev) => ({ ...prev, ...currentData }))
 
       if (activeStep < steps.length - 1) {
-        setActiveStep((prev) => prev + 1)
+          goToStep(activeStep + 1);
+
+        // setActiveStep((prev) => prev + 1)
       } else {
         // Final submission
-        const finalData = { ...formData, 
+        const finalData = {
+          ...formData,
           ...currentData,
-            products: prepareProductsArray() 
-         }
+          products: prepareProductsArray()
+        }
         // alert("הטופס נשלח בהצלחה! הפרטים נשמרו במערכת.")
-       try {
-        // Send data to the server
-        await sendFormData(finalData);
-        alert("הטופס נשלח בהצלחה! הפרטים נשמרו במערכת.");
-      } catch (error) {
-        alert("שגיאה בשליחת הטופס. נסו שוב מאוחר יותר.");
-      }
+        try {
+          // Send data to the server
+          await sendFormData(finalData);
+          alert("הטופס נשלח בהצלחה! הפרטים נשמרו במערכת.");
+        } catch (error) {
+          alert("שגיאה בשליחת הטופס. נסו שוב מאוחר יותר.");
+        }
       }
     }
   }
 
   const handleBack = () => {
     if (activeStep > 0) {
-      setActiveStep((prev) => prev - 1)
+       goToStep(activeStep - 1)
+      // setActiveStep((prev) => prev - 1)
     }
   }
 
@@ -158,8 +171,8 @@ const prepareProductsArray = () => {
       case 2:
         return <CategoriesInfo onProductsChange={setSelectedProducts} />;
       case 3:
-        return <SummaryPage data={{ formData, selectedProducts }}/>
-         
+        return <SummaryPage data={{ formData, selectedProducts }} />
+
       default:
         return null
     }
@@ -181,37 +194,37 @@ const prepareProductsArray = () => {
           {steps.map((step, index) => (
             <Step key={step.label}>
               <StepLabel
-        StepIconComponent={() => (
+                StepIconComponent={() => (
                   <Box
                     component="button"
-            type="button"
- onClick={() => {
-              if (index < activeStep) setActiveStep(index);
-            }}
-            disabled={index >= activeStep}
-                         sx={{
+                    type="button"
+                    onClick={() => {
+                      if (index < activeStep) goToStep(index);
+                    }}
+                    disabled={index >= activeStep}
+                    sx={{
                       width: 40,
                       height: 40,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                        bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
-              color: activeStep === index ? "white" : "#666",
-              border: "none",
-              cursor: "pointer",
-              p: 0,
+                      bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
+                      color: activeStep === index ? "white" : "#666",
+                      border: "none",
+                      cursor: "pointer",
+                      p: 0,
                     }}
                   >
                     {step.icon}
                   </Box>
                 )}
               >
-                  <Typography sx={{ fontWeight: activeStep === index ? "bold" : "normal" }}>{step.label}</Typography>
-      </StepLabel>
-    </Step>
-  ))}
-</Stepper>
+                <Typography sx={{ fontWeight: activeStep === index ? "bold" : "normal" }}>{step.label}</Typography>
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
         <Card sx={{ minHeight: 400, bgcolor: "#fafafa" }}>
           <CardContent sx={{ p: 4 }}>{renderStepContent()}</CardContent>
@@ -254,100 +267,3 @@ const prepareProductsArray = () => {
     </Container>
   )
 }
-// import { boolean, date, number, object, string } from "yup";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { useForm } from "react-hook-form";
-// import { Button, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
-
-// const schema = object({
-//   fromAddress: string().min(3, 'From address must be at least 3 characters').required('From address is required'),
-//   toAddress: string().min(3, 'To address must be at least 3 characters').required('To address is required'),
-//   fromFloor: number().min(-4, 'Min -4').max(30, 'Max 30').required('From floor is required'),
-//   toFloor: number().min(-4, 'Min -4').max(30, 'Max 30').required('To floor is required'),
-//   fromElevator: boolean(),
-//   toElevator: boolean(),
-//   date: date().required('Date is required'),
-// });
-
-
-
-// const CustomerForm = () => {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm({
-//     resolver: yupResolver(schema),
-//   });
-
-//   const onSubmit =async (data: {fromAddress:string,toAddress:string,fromFloor:number,toFloor:number,fromElevator?:boolean,toElevator?:boolean,date:Date }) => {
-//     console.log('Form Submitted:', data);
-//   };
-
-//     return (
-//       <>
-//      {/* <form style={{ maxWidth: 500, margin: "auto", display: "flex", flexDirection: "column", gap: 16 }}> */}
-//       <Typography variant="h6">Moving Details</Typography>
-
-//       <TextField
-//         {...register("fromAddress")}
-//         label="From Address"
-//         fullWidth
-//         error={!!errors.fromAddress}
-//         helperText={errors.fromAddress?.message}
-//       />
-
-//       <TextField
-//         {...register("toAddress")}
-//         label="To Address"
-//         fullWidth
-//         error={!!errors.toAddress}
-//         helperText={errors.toAddress?.message}
-//       />
-
-//       <TextField
-//         {...register("fromFloor")}
-//         label="From Floor"
-//         type="number"
-//         fullWidth
-//         error={!!errors.fromFloor}
-//         helperText={errors.fromFloor?.message}
-//       />
-
-//       <TextField
-//         {...register("toFloor")}
-//         label="To Floor"
-//         type="number"
-//         fullWidth
-//         error={!!errors.toFloor}
-//         helperText={errors.toFloor?.message}
-//       />
-
-//       <FormControlLabel
-//         control={<Checkbox {...register("fromElevator")} />}
-//         label="Elevator at From Address"
-//       />
-
-//       <FormControlLabel
-//         control={<Checkbox {...register("toElevator")} />}
-//         label="Elevator at To Address"
-//       />
-
-//       <TextField
-//         {...register("date")}
-//         label="Move Date"
-//         type="date"
-//         fullWidth
-//         error={!!errors.date}
-//         helperText={errors.date?.message}
-//       />
-
-//       <Button type="submit" onSubmit={handleSubmit(onSubmit)} variant="contained" color="primary">
-//         Submit
-//       </Button>
-//        {/* </form> */}
-//       </>
-//   );
-// };
-
-// export default CustomerForm;

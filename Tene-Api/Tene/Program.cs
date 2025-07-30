@@ -24,6 +24,8 @@ namespace Tene
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddDbContext<DataContext>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddCors();

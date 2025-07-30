@@ -5,11 +5,13 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tene", "Tene\Tene.csproj", "{80690F78-1F0D-4719-A85C-4AAE3DAB6C33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tene.Core", "Tene.Core\Tene.Core.csproj", "{E9FF0369-9719-4EF6-A702-39803195FD28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tene.Core", "Tene.Core\Tene.Core.csproj", "{E9FF0369-9719-4EF6-A702-39803195FD28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tene.Data", "Tene.Data\Tene.Data.csproj", "{996DCABF-84B7-4C1A-AA67-06AD7A2DB890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tene.Data", "Tene.Data\Tene.Data.csproj", "{996DCABF-84B7-4C1A-AA67-06AD7A2DB890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tene.Service", "Tene.Service\Tene.Service.csproj", "{43F57D76-4DC5-4150-AC3C-289251D39091}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tene.Service", "Tene.Service\Tene.Service.csproj", "{43F57D76-4DC5-4150-AC3C-289251D39091}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share", "Helper\Share.csproj", "{624B3881-CC9B-4DEC-A415-73459EBAEBA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{43F57D76-4DC5-4150-AC3C-289251D39091}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43F57D76-4DC5-4150-AC3C-289251D39091}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43F57D76-4DC5-4150-AC3C-289251D39091}.Release|Any CPU.Build.0 = Release|Any CPU
+		{624B3881-CC9B-4DEC-A415-73459EBAEBA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{624B3881-CC9B-4DEC-A415-73459EBAEBA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{624B3881-CC9B-4DEC-A415-73459EBAEBA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{624B3881-CC9B-4DEC-A415-73459EBAEBA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tene.Core.DTOs
 {
-    public class ProductDetailsDTO
+    public class ProductDetailsUpdateAddDTO
     {
-        public int Id { get; set; }
         public string ProductName { get; set; }
         public decimal Cob { get; set; }
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
     }
 }

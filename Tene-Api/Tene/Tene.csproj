@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Helper\Share.csproj" />
     <ProjectReference Include="..\Tene.Core\Tene.Core.csproj" />
     <ProjectReference Include="..\Tene.Data\Tene.Data.csproj" />
     <ProjectReference Include="..\Tene.Service\Tene.Service.csproj" />

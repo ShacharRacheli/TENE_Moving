@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { object, string } from "yup";
-const apiUrl = import.meta.env.VITE_APP_API_URL;
+const apiUrl = "http://localhost:5180";
 
 const schema = object({
   email: string().email('Invalid email format').required('Email is required'),
@@ -40,11 +40,9 @@ const [showPassword, setShowPassword] = useState(false);
       });
       if (res.status === 200 && res.data && res.data.token) {
         sessionStorage.setItem('token', res.data.token);
-        // succeedFunc(res.data.token);
-        navigate('/adminDashboard');
+        navigate('/adminProductPanel');
         reset();
       }
-    //   handleClose();
     } catch (e: any) {
       if ((e.response && e.response.status === 401) || e.response.status === 400) {
         alert('Email or password are not correct');
@@ -53,7 +51,6 @@ const [showPassword, setShowPassword] = useState(false);
   }
 
     return(<>
-      {/* <Fade > */}
         <Paper
           elevation={0}
           sx={{
@@ -303,7 +300,6 @@ background: "linear-gradient(135deg, #1c5e5e 0%, #397f7f 100%)",
             </Box>
           </Box>
         </Paper>
-      {/* </Fade> */}
     </>)
 }
 export default AdminLogin

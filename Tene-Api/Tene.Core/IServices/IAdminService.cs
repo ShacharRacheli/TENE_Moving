@@ -18,8 +18,9 @@ namespace Tene.Core.IServices
         /// <param name="id"></param>
         /// <returns></returns>
         Task<ProductDetails> GetByIdAsync(int id);
-        Task<bool> UpdateProductAsync(ProductDetails product);
+        Task<bool> UpdateProductAsync(int id, ProductDetails product);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<bool> AddNewCategoryAsync(string category);
 
 
     }

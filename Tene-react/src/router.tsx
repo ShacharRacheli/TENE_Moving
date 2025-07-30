@@ -5,6 +5,7 @@ import About from "./components/pages/about";
 import MovingDetailsForm from "./components/forms/movingDetailsForm";
 import AdminLogin from "./components/admin/adminLogin";
 import AdminProductPanel from "./components/admin/adminProductPanel";
+import PrivateRoute from "./privateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -15,7 +16,11 @@ export const router = createBrowserRouter([
             { path: '/about', element: <About/> },
             { path: '/sendRequest', element: <MovingDetailsForm/> },
             { path: '/admin', element: <AdminLogin/> },
-            { path: '/adminProductPanel', element: <AdminProductPanel/> },
+            { path: '/adminProductPanel', element: (
+    <PrivateRoute>
+      <AdminProductPanel />
+    </PrivateRoute>
+  ),},
           
         ]
     }

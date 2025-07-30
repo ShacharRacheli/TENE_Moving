@@ -145,6 +145,8 @@ const AdminProductPanel = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [newCategory, setNewCategory] = useState('');
+
   const { register,
      handleSubmit,
      reset, 
@@ -201,6 +203,23 @@ const loadProducts = async () => {
     reset();
     loadProducts();
   };
+const handleAddCategory = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    await axios.post(`${apiUrl}/api/Admin/addCategory`, newCategory, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    alert('Category added!');
+    setNewCategory('');
+    // optionally refresh categories list here
+  } catch (err) {
+    alert('Failed to add category');
+  }
+};
 
   const startEdit = (product: Product) => {
     setEditingId(product.id);
@@ -218,6 +237,23 @@ const loadProducts = async () => {
 
   return (
     <Paper sx={{ p: 4, m: 4 }}>
+<Box sx={{ mt: 4 }}>
+  <Typography variant="h6" gutterBottom>Add New Category</Typography>
+  <Box sx={{ display: 'flex', gap: 2 }}>
+    <TextField
+      label="Category Name"
+      value={newCategory}
+      onChange={(e) => setNewCategory(e.target.value)}
+    />
+    <Button
+      variant="contained"
+      onClick={handleAddCategory}
+      disabled={!newCategory.trim()}
+    >
+      Add
+    </Button>
+  </Box>
+</Box>
 
       <Typography variant="h5" gutterBottom>
         Admin Product Panel

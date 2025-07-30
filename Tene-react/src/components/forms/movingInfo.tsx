@@ -1,4 +1,6 @@
-// // components/MovingDetailsStep.tsx
+
+// import { useState,useRef } from "react";
+// import { Autocomplete } from "@mui/material";
 // import { Controller, type UseFormReturn } from "react-hook-form";
 // import {
 //   Box,
@@ -8,38 +10,113 @@
 //   FormControlLabel,
 //   Checkbox,
 // } from "@mui/material";
-// import type { MovingInfo } from "../../types";
-// import { useDispatch, useSelector } from "react-redux";
-// import type { RootState } from "../../store/store";
-// // { form }: { form: UseFormReturn<MovingDetails> }
-// export default function MovingInfo() {
+// import type { MovingDetailsType } from "../../store/formSlice";
+// import { useDispatch } from "react-redux";
+// import { updateForm } from "../../store/formSlice";
 
-  
-//   return (
-//     <Box component="form" sx={{ mt: 3 }}>
+// export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetailsType> }) {
+//   const dispatch = useDispatch();
+
+//   const onBlur = () => {
+//     const values = form.getValues();
+//     dispatch(updateForm(values));
+//   };
+//     const [fromOptions, setFromOptions] = useState<string[]>([]);
+//   const [toOptions, setToOptions] = useState<string[]>([]);
+//   const fromTimeout = useRef<number | null>(null);
+// const toTimeout = useRef<number | null>(null);
+
+//     const fetchAddresses = async (input: string, setOptions: (opts: string[]) => void) => {
+//     if (!input) return setOptions([]);
+//     const res = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(input)}&addressdetails=1&limit=8&countrycodes=il`
+//     );
+//     const data = await res.json();
+//     const options = data.map((item: any) => {
+//       const address = item.address;
+//       const city =
+//         address.city ||
+//         address.town ||
+//         address.village ||
+//         address.hamlet ||
+//         address.municipality ||
+//         "";
+//       const street = address.road || address.street || "";
+//       if (city && street) return `${street}, ${city}`;
+//       if (city) return city;
+//       return item.display_name;
+//     });
+//     setOptions(Array.from(new Set(options)));
+//   };
+//    return (
+//     <Box sx={{ mt: 3 }}>
 //       <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold", color: "#2d5555" }}>
 //         מאיפה ולאן מובילים
 //       </Typography>
 //       <Grid container spacing={3}>
-//         <Grid  size={{xs:12, md:6}}>
+//         <Grid size={{ xs: 12, md: 6 }}>
 //           <Controller
 //             name="fromAddress"
 //             control={form.control}
 //             render={({ field, fieldState: { error } }) => (
-//               <TextField {...field} fullWidth label="כתובת מוצא *" error={!!error} helperText={error?.message} />
+//               <Autocomplete
+//                 freeSolo
+//                 options={fromOptions}
+//                 inputValue={field.value || ""}
+//                 onInputChange={(_, value) => {
+//                   field.onChange(value);
+// if (fromTimeout.current) clearTimeout(fromTimeout.current);
+//                   fromTimeout.current = setTimeout(() => {
+//                     fetchAddresses(value, setFromOptions);
+//                   }, 400); // debounce
+//                 }}
+//                 onChange={(_, value) => field.onChange(value || "")}
+//                 openOnFocus
+//                 renderInput={(params) => (
+//                   <TextField
+//                     {...params}
+//                     label="כתובת מוצא *"
+//                     fullWidth
+//                     error={!!error}
+//                     helperText={error?.message}
+//                   />
+//                 )}
+//               />
 //             )}
 //           />
 //         </Grid>
-//         <Grid  size={{xs:12, md:6}}>
+//         <Grid size={{ xs: 12, md: 6 }}>
 //           <Controller
 //             name="toAddress"
 //             control={form.control}
 //             render={({ field, fieldState: { error } }) => (
-//               <TextField {...field} fullWidth label="כתובת יעד *" error={!!error} helperText={error?.message} />
+//               <Autocomplete
+//                 freeSolo
+//                 options={toOptions}
+//                 inputValue={field.value || ""}
+//                 onInputChange={(_, value) => {
+//                   field.onChange(value);
+//                   if (toTimeout.current) clearTimeout(toTimeout.current);
+//                   toTimeout.current = setTimeout(() => {
+//                     fetchAddresses(value, setToOptions);
+//                   }, 400); // debounce
+//                 }}
+//                 onChange={(_, value) => field.onChange(value || "")}
+//                 openOnFocus
+//                 renderInput={(params) => (
+//                   <TextField
+//                     {...params}
+//                     label="כתובת יעד *"
+//                     fullWidth
+//                     error={!!error}
+//                     helperText={error?.message}
+//                   />
+//                 )}
+//               />
 //             )}
 //           />
 //         </Grid>
-//         <Grid  size={{xs:12, md:6}}>
+//         <Grid size={{xs:12,md:6}}>
 //           <Controller
 //             name="fromFloor"
 //             control={form.control}
@@ -56,7 +133,7 @@
 //             )}
 //           />
 //         </Grid>
-//         <Grid  size={{xs:12, md:6}}>
+//         <Grid size={{xs:12,md:6}}>
 //           <Controller
 //             name="toFloor"
 //             control={form.control}
@@ -73,7 +150,7 @@
 //             )}
 //           />
 //         </Grid>
-//         <Grid  size={{xs:12, md:6}}>
+//         <Grid size={{xs:12,md:6}}>
 //           <Controller
 //             name="fromElevator"
 //             control={form.control}
@@ -82,7 +159,7 @@
 //             )}
 //           />
 //         </Grid>
-//         <Grid size={{xs:12, md:6}} >
+//         <Grid size={{xs:12,md:6}}>
 //           <Controller
 //             name="toElevator"
 //             control={form.control}
@@ -92,31 +169,31 @@
 //           />
 //         </Grid>
 //         <Grid size={{xs:12}}>
-//           <Controller
-//             name="moveDate"
-//             control={form.control}
-//             render={({ field, fieldState: { error } }) => (
-//               <TextField
-//                 {...field}
-//                 fullWidth
-//                 type="date"
-//                 label="תאריך הובלה *"
-//                 InputLabelProps={{ shrink: true }}
-//                 error={!!error}
-//                 helperText={error?.message}
-//                 value={field.value ? new Date(field.value).toISOString().split("T")[0] : ""}
-//                 onChange={(e) => field.onChange(new Date(e.target.value))}
-//               />
-//             )}
-//           />
+//                   <Controller
+//   name="moveDate"
+//   control={form.control}
+//   render={({ field, fieldState: { error } }) => (
+//     <TextField
+//       {...field}
+//       fullWidth
+//       type="date"
+//       label="תאריך הובלה *"
+//       InputLabelProps={{ shrink: true }}
+//       error={!!error}
+//       helperText={error?.message}
+//       value={field.value || ""}
+//       onChange={(e) => field.onChange(e.target.value)} // value is already in YYYY-MM-DD
+//     />
+//   )}
+// />
 //         </Grid>
 //       </Grid>
 //     </Box>
 //   );
 // }
 
-
-
+import { useState, useRef } from "react";
+import { Autocomplete } from "@mui/material";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import {
   Box,
@@ -138,31 +215,117 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
     dispatch(updateForm(values));
   };
 
+  const [fromOptions, setFromOptions] = useState<string[]>([]);
+  const [toOptions, setToOptions] = useState<string[]>([]);
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
+  const fromTimeout = useRef<number | null>(null);
+  const toTimeout = useRef<number | null>(null);
+
+  const fetchAddresses = async (input: string, setOptions: (opts: string[]) => void) => {
+    if (!input) return setOptions([]);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(input)}&addressdetails=1&limit=8&countrycodes=il`
+    );
+    const data = await res.json();
+    const options = data.map((item: any) => {
+      const address = item.address;
+      const city =
+        address.city ||
+        address.town ||
+        address.village ||
+        address.hamlet ||
+        address.municipality ||
+        "";
+      const street = address.road || address.street || "";
+      if (city && street) return `${street}, ${city}`;
+      if (city) return city;
+      return item.display_name;
+    });
+    setOptions(Array.from(new Set(options)));
+  };
+
   return (
-    <Box sx={{ mt: 3 }} onBlur={onBlur}>
+    <Box sx={{ mt: 3 }}>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold", color: "#2d5555" }}>
         מאיפה ולאן מובילים
       </Typography>
       <Grid container spacing={3}>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="fromAddress"
             control={form.control}
             render={({ field, fieldState: { error } }) => (
-              <TextField {...field} fullWidth label="כתובת מוצא *" error={!!error} helperText={error?.message} />
+              <Autocomplete
+                freeSolo
+                options={fromOptions}
+                inputValue={field.value || ""}
+                open={fromOpen && fromOptions.length > 0}
+                onOpen={() => setFromOpen(true)}
+                onClose={() => setFromOpen(false)}
+                filterOptions={(x) => x}
+                onInputChange={(_, value, reason) => {
+                  field.onChange(value);
+                  if (reason === "input") {
+                    setFromOpen(!!value);
+                    if (fromTimeout.current) clearTimeout(fromTimeout.current);
+                    fromTimeout.current = window.setTimeout(() => {
+                      fetchAddresses(value, setFromOptions);
+                    }, 400);
+                  }
+                }}
+                onChange={(_, value) => field.onChange(value || "")}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="כתובת מוצא *"
+                    fullWidth
+                    error={!!error}
+                    helperText={error?.message}
+                  />
+                )}
+              />
             )}
           />
         </Grid>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="toAddress"
             control={form.control}
             render={({ field, fieldState: { error } }) => (
-              <TextField {...field} fullWidth label="כתובת יעד *" error={!!error} helperText={error?.message} />
+              <Autocomplete
+                freeSolo
+                options={toOptions}
+                inputValue={field.value || ""}
+                open={toOpen && toOptions.length > 0}
+                onOpen={() => setToOpen(true)}
+                onClose={() => setToOpen(false)}
+                filterOptions={(x) => x}
+                onInputChange={(_, value, reason) => {
+                  field.onChange(value);
+                  if (reason === "input") {
+                    setToOpen(!!value);
+                    if (toTimeout.current) clearTimeout(toTimeout.current);
+                    toTimeout.current = window.setTimeout(() => {
+                      fetchAddresses(value, setToOptions);
+                    }, 400);
+                  }
+                }}
+                onChange={(_, value) => field.onChange(value || "")}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="כתובת יעד *"
+                    fullWidth
+                    error={!!error}
+                    helperText={error?.message}
+                  />
+                )}
+              />
             )}
           />
         </Grid>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="fromFloor"
             control={form.control}
@@ -179,7 +342,7 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
             )}
           />
         </Grid>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="toFloor"
             control={form.control}
@@ -196,7 +359,7 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
             )}
           />
         </Grid>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="fromElevator"
             control={form.control}
@@ -205,7 +368,7 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
             )}
           />
         </Grid>
-        <Grid size={{xs:12,md:6}}>
+    <Grid size={{xs:12,md:6}}>
           <Controller
             name="toElevator"
             control={form.control}
@@ -214,8 +377,8 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
             )}
           />
         </Grid>
-        <Grid size={{xs:12}}>
-          {/* <Controller
+    <Grid size={{xs:12}}>
+          <Controller
             name="moveDate"
             control={form.control}
             render={({ field, fieldState: { error } }) => (
@@ -227,31 +390,14 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 InputLabelProps={{ shrink: true }}
                 error={!!error}
                 helperText={error?.message}
-                value={field.value ? new Date(field.value).toISOString().split("T")[0] : ""}
-                onChange={(e) => field.onChange(new Date(e.target.value))}
+                value={field.value || ""}
+                onChange={(e) => field.onChange(e.target.value)}
               />
             )}
-          /> */}
-          <Controller
-  name="moveDate"
-  control={form.control}
-  render={({ field, fieldState: { error } }) => (
-    <TextField
-      {...field}
-      fullWidth
-      type="date"
-      label="תאריך הובלה *"
-      InputLabelProps={{ shrink: true }}
-      error={!!error}
-      helperText={error?.message}
-      value={field.value || ""}
-      onChange={(e) => field.onChange(e.target.value)} // value is already in YYYY-MM-DD
-    />
-  )}
-/>
+          />
         </Grid>
       </Grid>
     </Box>
-  );
-}
 
+  );
+ }

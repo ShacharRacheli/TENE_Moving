@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,14 @@ namespace Tene.Data.Repositories
         public async Task<bool> AddNewRequest(RequestDetails requestDetails)
         {     
             await _dataContext.RequestsDetails.AddAsync(requestDetails);
+
             return await _dataContext.SaveChangesAsync()>=1;
+        }
+        public async Task<RequestDetails> GetRequestWithProducts(int requestId)
+        {
+            return await _dataContext.RequestsDetails
+                .Include(r => r.Products)
+                .FirstOrDefaultAsync(r => r.Id == requestId);
         }
 
     }

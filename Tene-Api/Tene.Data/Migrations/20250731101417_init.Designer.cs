@@ -12,8 +12,8 @@ using Tene.Data;
 namespace Tene.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250727105959_addDb1")]
-    partial class addDb1
+    [Migration("20250731101417_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,14 +78,15 @@ namespace Tene.Data.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("RequestDetailsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("RequestDetailsId");
 
@@ -153,11 +154,19 @@ namespace Tene.Data.Migrations
 
             modelBuilder.Entity("Tene.Core.Models.ProductsFromUser", b =>
                 {
+                    b.HasOne("Tene.Core.Models.ProductDetails", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tene.Core.Models.RequestDetails", "RequestDetails")
                         .WithMany("Products")
                         .HasForeignKey("RequestDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
 
                     b.Navigation("RequestDetails");
                 });

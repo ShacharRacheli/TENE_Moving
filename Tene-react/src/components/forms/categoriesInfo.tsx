@@ -228,7 +228,7 @@ import {
 import type { RootState } from "../../store/store"
 
 interface Product {
-  id: string
+  id: number
   productName: string
 }
 
@@ -254,7 +254,7 @@ export default function CategoriesInfo({
     const map: Record<string, number> = {}
     formState.categories?.forEach(category => {
       category.products.forEach(product => {
-        map[product.productId] = product.quantity
+        map[product.productId] = product.amount
       })
     })
     return map
@@ -298,8 +298,8 @@ export default function CategoriesInfo({
       dispatch(updateProduct({
         categoryId: selectedCategory.id.toString(),
         product: {
-          productId: product.id,
-          quantity: newQuantity
+          productId: Number(product.id),
+          amount: newQuantity
         }
       }))
     }

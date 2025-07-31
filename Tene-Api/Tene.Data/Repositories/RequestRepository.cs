@@ -22,6 +22,10 @@ namespace Tene.Data.Repositories
 
             return await _dataContext.SaveChangesAsync()>=1;
         }
+        public async Task<ProductDetails> GetProductByIdAsync(int id)
+        {
+            return await _dataContext.ProductsDetails.FirstOrDefaultAsync(p => p.Id == id);
+        }
         public async Task<RequestDetails> GetRequestWithProducts(int requestId)
         {
             return await _dataContext.RequestsDetails

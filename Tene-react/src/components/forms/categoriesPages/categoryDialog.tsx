@@ -6,7 +6,7 @@ import {
 import { Close as CloseIcon, Add, Remove } from "@mui/icons-material"
 
 interface Product {
-  id: string
+  id: number
   name: string
   description?: string
 }
@@ -17,8 +17,8 @@ interface CategoryDialogProps {
   onReset: () => void
   categoryName: string
   products: Product[]
-  productQuantities: Record<string, number>
-  updateQuantity: (productId: string, change: number) => void
+  productQuantities: Record<number, number>
+  updateQuantity: (productId: number, change: number) => void
 }
 
 export default function CategoryDialog({

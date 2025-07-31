@@ -10,15 +10,15 @@ using Tene.Core.Models;
 
 namespace Tene.Service.Services
 {
-    public class RequestService:IRequestService
+    public class RequestService : IRequestService
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IEmailService _emailService;
 
-        public RequestService(IRequestRepository requestRepository,IEmailService emailService)
+        public RequestService(IRequestRepository requestRepository, IEmailService emailService)
         {
-            _requestRepository= requestRepository;
-            _emailService= emailService;
+            _requestRepository = requestRepository;
+            _emailService = emailService;
         }
         //public async Task<bool> AddNewRequest(RequestDetails requestDetails)
         //{

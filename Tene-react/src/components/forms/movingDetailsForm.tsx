@@ -143,7 +143,6 @@ useEffect(() => {
           ...currentData,
           products: prepareProductsArray()
         }
-        // alert("הטופס נשלח בהצלחה! הפרטים נשמרו במערכת.")
         try {
           // Send data to the server
           await sendFormData(finalData);

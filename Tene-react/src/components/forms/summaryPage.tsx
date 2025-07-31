@@ -1,16 +1,22 @@
 import { Box, Typography, Divider } from "@mui/material"
-import { categories } from "./categoriesPages/categoryData"
+import type { Category } from "./categoriesInfo"
+// import { categories, type Category } from "./categoriesPages/categoryData"
 
 interface SummaryPageProps {
   data: {
     formData?: Record<string, any>
-    selectedProducts?: Record<string, number>
+    selectedProducts?: Record<number, number>
+        categoriesFromServer?: Category[]
+
   }
 }
 
 export default function SummaryPage({ data }: SummaryPageProps) {
-  const { formData = {}, selectedProducts = {} } = data
-  const allProducts = categories.flatMap(category => category.products)
+  // const { formData = {}, selectedProducts = {} } = data
+  // const allProducts = categories.flatMap(category => category.products)
+const { formData = {}, selectedProducts = {}, categoriesFromServer = [] } = data
+
+const allProducts = categoriesFromServer.flatMap(category => category.products)
 
   return (
     <Box sx={{ p: 3, direction: "rtl", maxWidth: 600, margin: "0 auto" }}>
@@ -45,7 +51,7 @@ export default function SummaryPage({ data }: SummaryPageProps) {
       <Typography variant="h6" gutterBottom>
         מוצרים שנבחרו:
       </Typography>
-
+{/* 
       {Object.keys(selectedProducts).length === 0 ? (
         <Typography>לא נבחרו מוצרים</Typography>
       ) : (
@@ -59,7 +65,27 @@ export default function SummaryPage({ data }: SummaryPageProps) {
             )
           })}
         </ul>
-      )}
+      )} */}
+      {Object.keys(selectedProducts).length === 0 ? (
+  <Typography>לא נבחרו מוצרים</Typography>
+) : (
+  <ul style={{ paddingRight: '20px' }}>
+    {Object.entries(selectedProducts).map(([productId, quantity]) => {
+      const product = allProducts.find(p => String(p.id) === String(productId))
+      return (
+        <li key={productId}>
+          {product?.productName || `מוצר (${productId})`}: {quantity}
+        </li>
+      )
+    })}
+  </ul>
+)}
+
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Typography variant="body1">
+          תודה על מילוי הטופס! נציגנו ייצור עמכם קשר בהקדם.
+        </Typography>
+      </Box>
     </Box>
   )
 }

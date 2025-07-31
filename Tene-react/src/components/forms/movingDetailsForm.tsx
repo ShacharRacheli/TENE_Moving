@@ -149,7 +149,7 @@ useEffect(() => {
       } else {
         // Final submission
         const finalData = {
-          ...formData,
+          ...(formData as CustomerInfoType & MovingDetailsType),
           ...currentData,
           products: prepareProductsArray()
         }

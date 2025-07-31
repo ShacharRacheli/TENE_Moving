@@ -2,10 +2,10 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  text-align: right; /* Align all text to the right */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,7 +26,8 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  direction: rtl;         /* RTL support if you're using Hebrew */
+  direction: rtl;  
+  text-align: right; 
 }
 
 html, #root {

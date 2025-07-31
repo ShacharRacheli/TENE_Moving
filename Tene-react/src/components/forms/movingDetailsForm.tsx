@@ -57,6 +57,7 @@ const steps = [
   { label: "מה מובילים ", icon: <CheckCircle /> },
   { label: "סיכום", icon: <CheckCircle /> },
 ]
+
 export default function MovingDetailsForm() {
    const location = useLocation();
   const navigate = useNavigate();

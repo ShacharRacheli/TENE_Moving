@@ -180,7 +180,7 @@ useEffect(() => {
       case 2:
         return <CategoriesInfo onProductsChange={setSelectedProducts} />;
       case 3:
-        return <SummaryPage data={{ formData, selectedProducts }} />
+        return <SummaryPage data={{ formData, selectedProducts, }} />
 
       default:
         return null

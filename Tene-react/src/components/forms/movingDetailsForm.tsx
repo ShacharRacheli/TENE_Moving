@@ -24,10 +24,11 @@ import { Person, LocationOn, CheckCircle, ArrowBack, ArrowForward } from "@mui/i
 import type { CustomerInfoType, MovingDetailsType } from "../../store/formSlice"
 import CustomerInfo from "./customerInfo"
 import MovingInfo from "./movingInfo"
-import CategoriesInfo from "./categoriesInfo"
+import CategoriesInfo, { type Category } from "./categoriesInfo"
 import SummaryPage from "./summaryPage"
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router"
+// import type { Category } from "./categoriesPages/categoryData"
 
 // const apiUrl = import.meta.env.VITE_APP_API_URL;
 
@@ -88,6 +89,14 @@ export default function MovingDetailsForm() {
       // throw error;
     }
   };
+  const [categoriesFromServer, setCategoriesFromServer] = useState<Category[]>([]);
+
+useEffect(() => {
+  axios.get("http://localhost:5180/api/Product/products-by-category")
+    .then(res => setCategoriesFromServer(res.data))
+    .catch(err => console.error(err));
+}, []);
+
 useEffect(() => {
   const currentStep = location.pathname.split("/").pop(); // לדוגמה 'moving'
   const stepIndex = stepRoutes.indexOf(currentStep || "customer");
@@ -177,9 +186,11 @@ useEffect(() => {
       case 1:
         return <MovingInfo form={movingForm} />;
       case 2:
-        return <CategoriesInfo onProductsChange={setSelectedProducts} />;
+        return <CategoriesInfo   categories={categoriesFromServer}
+ onProductsChange={setSelectedProducts} />;
       case 3:
-        return <SummaryPage data={{ formData, selectedProducts }} />
+    return  <SummaryPage data={{ formData, selectedProducts, categoriesFromServer }} />
+
 
       default:
         return null

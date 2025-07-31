@@ -232,7 +232,7 @@ interface Product {
   productName: string
 }
 
-interface Category {
+export interface Category {
   id: number
   categoryName: string
   icon?: React.ReactNode
@@ -240,14 +240,16 @@ interface Category {
 }
 
 export default function CategoriesInfo({
+  categories,          // <--- from parent
   onProductsChange,
 }: {
+  categories: Category[]
   onProductsChange: (products: Record<string, number>) => void
-}) {
+})  {
   const dispatch = useDispatch()
   const formState = useSelector((state: RootState) => state.form)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
-  const [categories, setCategories] = useState<Category[]>([])
+  // const [categories, setCategories] = useState<Category[]>([])
 
   // Initialize quantities from Redux form state
   const getInitialQuantities = (): Record<string, number> => {
@@ -263,19 +265,19 @@ export default function CategoriesInfo({
   const [productQuantities, setProductQuantities] = useState<Record<string, number>>(getInitialQuantities())
 
   // Fetch categories + products from backend on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("http://localhost:5180/api/Product/products-by-category")
-        const data = await response.json()
-        setCategories(data)
-      } catch (error) {
-        console.error("Failed to fetch categories:", error)
-      }
-    }
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:5180/api/Product/products-by-category")
+  //       const data = await response.json()
+  //       setCategories(data)
+  //     } catch (error) {
+  //       console.error("Failed to fetch categories:", error)
+  //     }
+  //   }
 
-    fetchCategories()
-  }, [])
+  //   fetchCategories()
+  // }, [])
 
   // Update parent with product quantities
   useEffect(() => {

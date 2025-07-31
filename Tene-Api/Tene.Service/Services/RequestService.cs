@@ -10,22 +10,23 @@ using Tene.Core.Models;
 
 namespace Tene.Service.Services
 {
-    public class RequestService:IRequestService
+    public class RequestService : IRequestService
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IEmailService _emailService;
 
-        public RequestService(IRequestRepository requestRepository,IEmailService emailService)
+        public RequestService(IRequestRepository requestRepository, IEmailService emailService)
         {
-            _requestRepository= requestRepository;
-            _emailService= emailService;
+            _requestRepository = requestRepository;
+            _emailService = emailService;
         }
         public async Task<bool> AddNewRequest(RequestDetails requestDetails)
         {
-          if(await _requestRepository.AddNewRequest(requestDetails))
+            if (await _requestRepository.AddNewRequest(requestDetails))
             {
                 //send email///////////////
-               await _emailService.SendEmailAsync(requestDetails.Email,"new moving details....",requestDetails.ToString());
+                await _emailService.SendEmailAsync(requestDetails.Email, "הצעת מחיר טנא הובלות", "הפרטים נקלטו במערכת ואנו ניצור איתך קשר בהקדם");
+                await _emailService.SendEmailAsync("@gmail.com", "הצעת מחיר טנא הובלות", "הפרטים נקלטו במערכת ואנו ניצור איתך קשר בהקדם");
                 return true;
             }
             return false;

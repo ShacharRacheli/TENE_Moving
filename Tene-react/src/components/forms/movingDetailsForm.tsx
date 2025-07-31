@@ -29,7 +29,7 @@ import SummaryPage from "./summaryPage"
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router"
 
-const apiUrl = import.meta.env.VITE_APP_API_URL;
+// const apiUrl = import.meta.env.VITE_APP_API_URL;
 
 
 // Validation schemas for each step
@@ -64,12 +64,20 @@ export default function MovingDetailsForm() {
 
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>({})
-  const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({});
+  const [selectedProducts, setSelectedProducts] = useState<Record<number, number>>({});
 
   const goToStep = (stepIndex: number) => {
     navigate(`/sendRequest/${stepRoutes[stepIndex]}`);
   };
-  const sendFormData = async (data: { products: { productName: string; amount: number }[]; fromAddress: string; toAddress: string; fromFloor: number; toFloor: number; fromElevator: boolean; toElevator: boolean; moveDate: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined } | { products: { productName: string; amount: number }[]; fullName: string; email: string; phone: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined }) => {
+  const sendFormData = async (data: {
+  products: { productId: number; amount: number }[];
+  fromAddress: string;
+  toAddress: string;
+  fromFloor: number;
+  toFloor: number;
+  moveDate: string;
+}) => {
+  // const sendFormData = async (data: { products: { productId: number; amount: number }[]; fromAddress: string; toAddress: string; fromFloor: number; toFloor: number; fromElevator: boolean; toElevator: boolean; moveDate: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined } | { products: { productId: number; amount: number }[]; fullName: string; email: string; phone: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined }) => {
     try {
       const response = await axios.post("http://localhost:5180/api/Request", data, {
         headers: { "Content-Type": "application/json" },
@@ -119,8 +127,8 @@ useEffect(() => {
     }
   }
   const prepareProductsArray = () => {
-    return Object.entries(selectedProducts).map(([productName, amount]) => ({
-      productName,
+    return Object.entries(selectedProducts).map(([productId, amount]) => ({
+      productId,
       amount,
     }));
   };

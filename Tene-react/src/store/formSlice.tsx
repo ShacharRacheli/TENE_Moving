@@ -1,44 +1,3 @@
-// import { createSlice } from '@reduxjs/toolkit'
-// import type { PayloadAction } from '@reduxjs/toolkit';
-
-
-// export type CustomerInfoType ={
-//   fullName: string
-//   email: string
-//   phone: string
-// }
-
-// export type MovingDetailsType ={
-//   fromAddress: string
-//   toAddress: string
-//   fromFloor: number
-//   toFloor: number
-//   fromElevator: boolean
-//   toElevator: boolean
-//   moveDate: string
-// }
-
-
-
-// export type FormData = Partial<CustomerInfoType & MovingDetailsType >
-
-// const initialState: FormData = {}
-
-// const formSlice = createSlice({
-//   name: 'form',
-//   initialState,
-//   reducers: {
-//     updateForm(state, action: PayloadAction<FormData>) {
-//       Object.assign(state, action.payload)
-//     },
-//     resetForm() {
-//       return {}
-//     },
-//   },
-// })
-
-// export const { updateForm, resetForm } = formSlice.actions
-// export default formSlice.reducer
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -61,8 +20,8 @@ export type MovingDetailsType = {
 
 // Product and Category types
 export type ProductSelection = {
-  productId: string
-  quantity: number
+  productId: number
+  amount: number
 }
 
 export type CategorySelection = {
@@ -106,7 +65,7 @@ const formSlice = createSlice({
       if (category) {
         const existingProduct = category.products.find(p => p.productId === action.payload.product.productId)
         if (existingProduct) {
-          existingProduct.quantity = action.payload.product.quantity
+          existingProduct.amount = action.payload.product.amount
         } else {
           category.products.push(action.payload.product)
         }
@@ -119,7 +78,7 @@ const formSlice = createSlice({
     },
     removeProduct(
       state,
-      action: PayloadAction<{ categoryId: string; productId: string }>
+      action: PayloadAction<{ categoryId: string; productId: number }>
     ) {
       const category = state.categories?.find(c => c.categoryId === action.payload.categoryId)
       if (category) {

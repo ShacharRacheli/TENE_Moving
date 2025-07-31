@@ -11,6 +11,8 @@ namespace Tene.Core.IRepositories
     {
         Task<bool> AddNewRequest(RequestDetails requestDetails);
         Task<RequestDetails> GetRequestWithProducts(int requestId); // 👈 add this
+        Task<ProductDetails> GetProductByIdAsync(int id);
+
     }
 }
 

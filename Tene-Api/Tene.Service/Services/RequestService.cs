@@ -62,7 +62,7 @@ namespace Tene.Service.Services
             if (fullRequest == null) return false;
 
             var customerEmail = BuildCustomerEmail(fullRequest);
-            var adminEmail = BuildAdminEmail(fullRequest);
+            var adminEmail =await BuildAdminEmail(fullRequest);
             Console.WriteLine("===================================");
             Console.WriteLine(customerEmail);
             Console.WriteLine(adminEmail);
@@ -98,7 +98,7 @@ namespace Tene.Service.Services
             return sb.ToString();
         }
 
-        private string BuildAdminEmail(RequestDetails request)
+        private async Task<string> BuildAdminEmail(RequestDetails request)
         {
             var sb = new StringBuilder();
             sb.AppendLine("התקבלה הזמנה חדשה:");
@@ -110,9 +110,11 @@ namespace Tene.Service.Services
 
             sb.AppendLine("\nמוצרים:");
             decimal total = 0;
+            
             foreach (var item in request.Products)
             {
-                var sumCob = item.Product.Cob * item.Amount;
+                var currentProduct=await _requestRepository.GetProductByIdAsync(item.ProductId);
+                var sumCob = currentProduct.Cob * item.Amount;
                 total += sumCob;
                 sb.AppendLine($"- {item.Product.ProductName} × {item.Amount} = {sumCob}");
             }

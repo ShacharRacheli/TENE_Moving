@@ -98,28 +98,61 @@ namespace Tene.Service.Services
             return sb.ToString();
         }
 
+        //private async Task<string> BuildAdminEmail(RequestDetails request)
+        //{
+        //    var sb = new StringBuilder();
+        //    sb.AppendLine("התקבלה הזמנה חדשה:\n");
+        //    sb.AppendLine($"שם: {request.FullName}\n");
+        //    sb.AppendLine($"אימייל: {request.Email}\n");
+        //    sb.AppendLine($"תאריך מעבר: {request.Date:dd/MM/yyyy} \n");
+        //    sb.AppendLine($"מכתובת: {request.FromAddress} (קומה {request.FromFloor}, מעלית: {(request.FromElevator ? "קיימת" : "אין")})\n");
+        //    sb.AppendLine($"לכתובת: {request.ToAddress} (קומה {request.ToFloor}, מעלית: {(request.ToElevator ? "קיימת" : "אין")})\n");
+        //    sb.AppendLine();
+        //    sb.AppendLine("\nמוצרים:");
+        //    decimal total = 0;
+
+        //    foreach (var item in request.Products)
+        //    {
+        //        var currentProduct=await _requestRepository.GetProductByIdAsync(item.ProductId);
+        //        var sumCob = currentProduct.Cob * item.Amount;
+        //        total += sumCob;
+        //        sb.AppendLine($"- {item.Product.ProductName} × {item.Amount} = {sumCob}\n");
+        //    }
+
+        //    sb.AppendLine($"\nסה\"כ לקוב: {total}\n");
+
+        //    return sb.ToString();
+        //}
         private async Task<string> BuildAdminEmail(RequestDetails request)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("התקבלה הזמנה חדשה:");
-            sb.AppendLine($"שם: {request.FullName}");
-            sb.AppendLine($"אימייל: {request.Email}");
-            sb.AppendLine($"תאריך מעבר: {request.Date:dd/MM/yyyy}");
-            sb.AppendLine($"מכתובת: {request.FromAddress} (קומה {request.FromFloor}, מעלית: {(request.FromElevator ? "קיימת" : "אין")})");
-            sb.AppendLine($"לכתובת: {request.ToAddress} (קומה {request.ToFloor}, מעלית: {(request.ToElevator ? "קיימת" : "אין")})");
 
-            sb.AppendLine("\nמוצרים:");
+            sb.AppendLine("<html><body style='font-family:Arial, sans-serif; direction:rtl; text-align:right;'>");
+            sb.AppendLine("<h2 style='color:#2d5555;'>התקבלה הזמנה חדשה</h2>");
+
+            sb.AppendLine("<p><strong>שם:</strong> " + request.FullName + "</p>");
+            sb.AppendLine("<p><strong>אימייל:</strong> " + request.Email + "</p>");
+            sb.AppendLine("<p><strong>תאריך מעבר:</strong> " + request.Date.ToString("dd/MM/yyyy") + "</p>");
+
+            sb.AppendLine("<p><strong>מכתובת:</strong> " + request.FromAddress + $" (קומה {request.FromFloor}, מעלית: {(request.FromElevator ? "קיימת" : "אין")})</p>");
+            sb.AppendLine("<p><strong>לכתובת:</strong> " + request.ToAddress + $" (קומה {request.ToFloor}, מעלית: {(request.ToElevator ? "קיימת" : "אין")})</p>");
+
+            sb.AppendLine("<h3>מוצרים:</h3>");
+            sb.AppendLine("<ul style='list-style-type:none; padding:0;'>");
+
             decimal total = 0;
-            
+
             foreach (var item in request.Products)
             {
-                var currentProduct=await _requestRepository.GetProductByIdAsync(item.ProductId);
+                var currentProduct = await _requestRepository.GetProductByIdAsync(item.ProductId);
                 var sumCob = currentProduct.Cob * item.Amount;
                 total += sumCob;
-                sb.AppendLine($"- {item.Product.ProductName} × {item.Amount} = {sumCob}");
+                sb.AppendLine($"<li>- {item.Product.ProductName} × {item.Amount} = {sumCob}</li>");
             }
 
-            sb.AppendLine($"\nסה\"כ לקוב: ₪{total}");
+            sb.AppendLine("</ul>");
+            sb.AppendLine($"<p><strong>סה\"כ לקוב:</strong> {total}</p>");
+            sb.AppendLine("</body></html>");
 
             return sb.ToString();
         }

@@ -80,12 +80,6 @@ const allProducts = categoriesFromServer.flatMap(category => category.products)
     })}
   </ul>
 )}
-
-      <Box sx={{ mt: 3, textAlign: "center" }}>
-        <Typography variant="body1">
-          תודה על מילוי הטופס! נציגנו ייצור עמכם קשר בהקדם.
-        </Typography>
-      </Box>
     </Box>
   )
 }

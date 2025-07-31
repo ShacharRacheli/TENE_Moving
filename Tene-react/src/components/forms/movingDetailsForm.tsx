@@ -128,7 +128,7 @@ useEffect(() => {
   }
   const prepareProductsArray = () => {
     return Object.entries(selectedProducts).map(([productId, amount]) => ({
-      productId,
+      productId: Number(productId),
       amount,
     }));
   };
@@ -148,7 +148,7 @@ useEffect(() => {
       } else {
         // Final submission
         const finalData = {
-          ...formData,
+          ...(formData as CustomerInfoType & MovingDetailsType),
           ...currentData,
           products: prepareProductsArray()
         }

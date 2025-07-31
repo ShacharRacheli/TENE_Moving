@@ -107,11 +107,12 @@ useEffect(() => {
     fromElevator: false,
     toElevator: false,
     moveDate: '',
+    ...formData
   }
   // Step 2: Moving Details
   const movingForm = useForm<MovingDetailsType>({
     resolver: yupResolver(movingDetailsSchema),
-    defaultValues,
+    defaultValues:formData as MovingDetailsType || defaultValues,
   })
 
   const getCurrentForm = () => {
@@ -128,7 +129,7 @@ useEffect(() => {
   }
   const prepareProductsArray = () => {
     return Object.entries(selectedProducts).map(([productId, amount]) => ({
-      productId,
+      productId: Number(productId),
       amount,
     }));
   };

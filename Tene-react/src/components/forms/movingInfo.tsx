@@ -206,6 +206,21 @@ import {
 import type { MovingDetailsType } from "../../store/formSlice";
 import { useDispatch } from "react-redux";
 import { updateForm } from "../../store/formSlice";
+const rtlTextFieldStyles = {
+  '& .MuiInputLabel-root': {
+    right: 28,
+    left: 'auto',
+    transformOrigin: 'right',
+  },
+  '& .MuiInputLabel-shrink': {
+    transformOrigin: 'right',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& .MuiOutlinedInput-notchedOutline legend': {
+      textAlign: 'right',
+    },
+  },
+};  
 
 export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetailsType> }) {
   const dispatch = useDispatch();
@@ -278,10 +293,12 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="כתובת מוצא *"
+                    label="* כתובת מוצא"
                     fullWidth
                     error={!!error}
                     helperText={error?.message}
+sx={rtlTextFieldStyles}
+
                   />
                 )}
               />
@@ -315,10 +332,12 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="כתובת יעד *"
+                    label="* כתובת יעד"
                     fullWidth
                     error={!!error}
                     helperText={error?.message}
+sx={rtlTextFieldStyles}
+
                   />
                 )}
               />
@@ -334,10 +353,11 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 {...field}
                 fullWidth
                 type="number"
-                label="קומת מוצא *"
+                label="* קומת מוצא"
                 error={!!error}
                 helperText={error?.message}
                 onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+sx={rtlTextFieldStyles}
               />
             )}
           />
@@ -351,10 +371,11 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 {...field}
                 fullWidth
                 type="number"
-                label="קומת יעד *"
+                label="* קומת יעד"
                 error={!!error}
                 helperText={error?.message}
                 onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+sx={rtlTextFieldStyles}
               />
             )}
           />
@@ -386,12 +407,13 @@ export default function MovingInfo({ form }: { form: UseFormReturn<MovingDetails
                 {...field}
                 fullWidth
                 type="date"
-                label="תאריך הובלה *"
+                label="* תאריך הובלה"
                 InputLabelProps={{ shrink: true }}
                 error={!!error}
                 helperText={error?.message}
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
+sx={rtlTextFieldStyles}
               />
             )}
           />

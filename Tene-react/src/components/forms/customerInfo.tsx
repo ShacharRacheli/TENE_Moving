@@ -84,7 +84,21 @@ import { Box, Grid, TextField, Typography } from "@mui/material";
 import type { CustomerInfoType } from "../../store/formSlice";
 import { useDispatch } from "react-redux";
 import { updateForm } from "../../store/formSlice";
-
+const rtlTextFieldStyles = {
+  '& .MuiInputLabel-root': {
+    right: 28,
+    left: 'auto',
+    transformOrigin: 'right',
+  },
+  '& .MuiInputLabel-shrink': {
+    transformOrigin: 'right',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& .MuiOutlinedInput-notchedOutline legend': {
+      textAlign: 'right',
+    },
+  },
+};
 export default function CustomerInfo({ form }: { form: UseFormReturn<CustomerInfoType> }) {
   const dispatch = useDispatch();
 
@@ -99,7 +113,7 @@ export default function CustomerInfo({ form }: { form: UseFormReturn<CustomerInf
         פרטי לקוח
       </Typography>
       <Grid container spacing={3}>
-        <Grid size={{xs:12}}>
+        <Grid size={{ xs: 12 }}>
           <Controller
             name="fullName"
             control={form.control}
@@ -107,15 +121,16 @@ export default function CustomerInfo({ form }: { form: UseFormReturn<CustomerInf
               <TextField
                 {...field}
                 fullWidth
-                label="שם מלא *"
+                label="* שם מלא"
                 placeholder="הכנס שם מלא"
                 error={!!error}
                 helperText={error?.message}
+                sx={rtlTextFieldStyles}
               />
             )}
           />
         </Grid>
-        <Grid size={{xs:12}}>
+        <Grid size={{ xs: 12 }}>
           <Controller
             name="phone"
             control={form.control}
@@ -123,15 +138,16 @@ export default function CustomerInfo({ form }: { form: UseFormReturn<CustomerInf
               <TextField
                 {...field}
                 fullWidth
-                label="מספר טלפון *"
+                label="* מספר טלפון"
                 placeholder="הכנס מספר טלפון"
                 error={!!error}
                 helperText={error?.message}
+                sx={rtlTextFieldStyles}
               />
             )}
           />
         </Grid>
-        <Grid size={{xs:12}} >
+        <Grid size={{ xs: 12 }} >
           <Controller
             name="email"
             control={form.control}
@@ -140,10 +156,11 @@ export default function CustomerInfo({ form }: { form: UseFormReturn<CustomerInf
                 {...field}
                 fullWidth
                 type="email"
-                label="כתובת אימייל *"
+                label="* כתובת אימייל"
                 placeholder="הכנס כתובת אימייל"
                 error={!!error}
                 helperText={error?.message}
+                sx={rtlTextFieldStyles}
               />
             )}
           />

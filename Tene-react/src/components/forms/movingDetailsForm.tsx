@@ -199,7 +199,9 @@ useEffect(() => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 4 }}
+    dir="rtl"
+     >
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" sx={{ fontWeight: "bold", mb: 1, color: "#2d5555" }}>
@@ -210,7 +212,16 @@ useEffect(() => {
           </Typography>
         </Box>
 
-        <Stepper activeStep={activeStep} sx={{ mb: 4 }} alternativeLabel>
+        <Stepper activeStep={activeStep} sx={{ mb: 4 ,
+         // This single line fixes the overflow issue
+   '& .MuiStepConnector-root': {
+      right: 'calc(-50% + 19px)',
+      left: 'calc(50% + 20px)',
+    }
+    //////////////////////here i changeddddddddddddd
+  }} 
+        alternativeLabel 
+        >
           {steps.map((step, index) => (
             <Step key={step.label}>
               <StepLabel
@@ -228,12 +239,31 @@ useEffect(() => {
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
-                      color: activeStep === index ? "white" : "#666",
-                      border: "none",
-                      cursor: "pointer",
-                      p: 0,
+                      justifyContent: "center", 
+                      // border: "none",
+                      // cursor: "pointer",
+                      // p: 0,
+                      // bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
+                      // color: activeStep === index ? "white" : "#666",
+                    // Updated color logic:
+              bgcolor: index < activeStep 
+                ? "#7fb5a1"  // Green for completed steps
+                : activeStep === index 
+                  ? "#2d7d7d"  // Teal for current step
+                  : "#e0e0e0", // Gray for future steps
+              color: index <= activeStep ? "white" : "#666",
+              border: "none",
+              cursor: index < activeStep ? "pointer" : "default",
+              p: 0,
+              transition: "all 0.3s ease", // Smooth color transition
+              "&:hover": {
+                bgcolor: index < activeStep 
+                  ? "#45a049"  // Darker green on hover for completed
+                  : activeStep === index 
+                    ? "#1a5a5a"  // Darker teal on hover for current
+                    : "#e0e0e0", // No change for future steps
+                    },
+                     
                     }}
                   >
                     {step.icon}
@@ -249,7 +279,7 @@ useEffect(() => {
         <Card sx={{ minHeight: 400, bgcolor: "#fafafa" }}>
           <CardContent sx={{ p: 4 }}>{renderStepContent()}</CardContent>
         </Card>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
           <Button
             onClick={handleNext}
             variant="contained"
@@ -281,7 +311,42 @@ useEffect(() => {
           >
             חזור
           </Button>
-        </Box>
+        </Box> */}
+<Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+  {/* Back button on the left */}
+  <Button
+    onClick={handleBack}
+    variant="contained"
+    startIcon={<ArrowForward sx={{ ml: 1 }}/>}
+    disabled={activeStep === 0}
+    sx={{
+      bgcolor: "#2d7d7d",
+      "&:hover": { bgcolor: "#1a5a5a" },
+      px: 4,
+      py: 1.5,
+      borderRadius: 25,
+      visibility: activeStep === 0 ? "hidden" : "visible",
+    }}
+  >
+    חזור
+  </Button>
+
+  {/* Next button on the right */}
+  <Button
+    onClick={handleNext}
+    variant="contained"
+    endIcon={<ArrowBack sx={{ mr: 1 }} />}
+    sx={{
+      bgcolor: "#2d7d7d",
+      "&:hover": { bgcolor: "#1a5a5a" },
+      px: 4,
+      py: 1.5,
+      borderRadius: 25,
+    }}
+  >
+    {activeStep === steps.length - 1 ? "שלח בקשה" : "המשך"}
+  </Button>
+</Box>
 
       </Paper>
     </Container>

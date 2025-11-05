@@ -1,4 +1,3 @@
-// components/CategoryDialog.tsx
 import {
   Dialog, DialogTitle, DialogContent, IconButton, Grid, Card, CardContent,
   Typography, Box, Button

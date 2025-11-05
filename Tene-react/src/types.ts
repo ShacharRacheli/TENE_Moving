@@ -1,4 +1,3 @@
-// types.ts
 export type CustomerInfo = {
   fullName: string
   email: string

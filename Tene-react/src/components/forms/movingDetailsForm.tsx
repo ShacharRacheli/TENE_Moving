@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
-import { object, string, number, boolean, date, type InferType } from "yup"
+import { object, string, number, boolean } from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import {
   Box,
   Button,
-  TextField,
   Typography,
   Stepper,
   Step,
@@ -13,11 +12,7 @@ import {
   Card,
   CardContent,
   Container,
-  FormControlLabel,
-  Checkbox,
-  Grid,
   Paper,
-  MenuItem,
 } from "@mui/material"
 import { Person, LocationOn, CheckCircle, ArrowBack, ArrowForward } from "@mui/icons-material"
 
@@ -28,12 +23,7 @@ import CategoriesInfo, { type Category } from "./categoriesInfo"
 import SummaryPage from "./summaryPage"
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router"
-// import type { Category } from "./categoriesPages/categoryData"
 
-// const apiUrl = import.meta.env.VITE_APP_API_URL;
-
-
-// Validation schemas for each step
 const customerInfoSchema = object({
   fullName: string().min(2, "השם חייב להכיל לפחות 2 תווים").required("שם מלא הוא שדה חובה"),
   email: string().email("כתובת אימייל לא תקינה").required("אימייל הוא שדה חובה"),
@@ -60,7 +50,7 @@ const steps = [
 ]
 
 export default function MovingDetailsForm() {
-   const location = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [activeStep, setActiveStep] = useState(0)
@@ -71,14 +61,13 @@ export default function MovingDetailsForm() {
     navigate(`/sendRequest/${stepRoutes[stepIndex]}`);
   };
   const sendFormData = async (data: {
-  products: { productId: number; amount: number }[];
-  fromAddress: string;
-  toAddress: string;
-  fromFloor: number;
-  toFloor: number;
-  moveDate: string;
-}) => {
-  // const sendFormData = async (data: { products: { productId: number; amount: number }[]; fromAddress: string; toAddress: string; fromFloor: number; toFloor: number; fromElevator: boolean; toElevator: boolean; moveDate: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined } | { products: { productId: number; amount: number }[]; fullName: string; email: string; phone: string; append?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; delete?: ((name: string) => void) | undefined; get?: ((name: string) => FormDataEntryValue | null) | undefined; getAll?: ((name: string) => FormDataEntryValue[]) | undefined; has?: ((name: string) => boolean) | undefined; set?: { (name: string, value: string | Blob): void; (name: string, value: string): void; (name: string, blobValue: Blob, filename?: string): void } | undefined; forEach?: ((callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any) => void) | undefined; entries?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined; keys?: (() => FormDataIterator<string>) | undefined; values?: (() => FormDataIterator<FormDataEntryValue>) | undefined;[Symbol.iterator]?: (() => FormDataIterator<[string, FormDataEntryValue]>) | undefined }) => {
+    products: { productId: number; amount: number }[];
+    fromAddress: string;
+    toAddress: string;
+    fromFloor: number;
+    toFloor: number;
+    moveDate: string;
+  }) => {
     try {
       const response = await axios.post("http://localhost:5180/api/Request", data, {
         headers: { "Content-Type": "application/json" },
@@ -86,22 +75,21 @@ export default function MovingDetailsForm() {
       return response.data;
     } catch (error) {
       console.error("Error sending form data:");
-      // throw error;
     }
   };
   const [categoriesFromServer, setCategoriesFromServer] = useState<Category[]>([]);
 
-useEffect(() => {
-  axios.get("http://localhost:5180/api/Product/products-by-category")
-    .then(res => setCategoriesFromServer(res.data))
-    .catch(err => console.error(err));
-}, []);
+  useEffect(() => {
+    axios.get("http://localhost:5180/api/Product/products-by-category")
+      .then(res => setCategoriesFromServer(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
-useEffect(() => {
-  const currentStep = location.pathname.split("/").pop(); // לדוגמה 'moving'
-  const stepIndex = stepRoutes.indexOf(currentStep || "customer");
-  setActiveStep(stepIndex >= 0 ? stepIndex : 0);
-}, [location.pathname]);
+  useEffect(() => {
+    const currentStep = location.pathname.split("/").pop(); // לדוגמה 'moving'
+    const stepIndex = stepRoutes.indexOf(currentStep || "customer");
+    setActiveStep(stepIndex >= 0 ? stepIndex : 0);
+  }, [location.pathname]);
 
   // Step 1: Customer Info
   const customerForm = useForm<CustomerInfoType>({
@@ -121,7 +109,7 @@ useEffect(() => {
   // Step 2: Moving Details
   const movingForm = useForm<MovingDetailsType>({
     resolver: yupResolver(movingDetailsSchema),
-    defaultValues:formData as MovingDetailsType || defaultValues,
+    defaultValues: formData as MovingDetailsType || defaultValues,
   })
 
   const getCurrentForm = () => {
@@ -152,7 +140,7 @@ useEffect(() => {
       setFormData((prev) => ({ ...prev, ...currentData }))
 
       if (activeStep < steps.length - 1) {
-          goToStep(activeStep + 1);
+        goToStep(activeStep + 1);
 
         // setActiveStep((prev) => prev + 1)
       } else {
@@ -175,7 +163,7 @@ useEffect(() => {
 
   const handleBack = () => {
     if (activeStep > 0) {
-       goToStep(activeStep - 1)
+      goToStep(activeStep - 1)
       // setActiveStep((prev) => prev - 1)
     }
   }
@@ -187,10 +175,10 @@ useEffect(() => {
       case 1:
         return <MovingInfo form={movingForm} />;
       case 2:
-        return <CategoriesInfo   categories={categoriesFromServer}
- onProductsChange={setSelectedProducts} />;
+        return <CategoriesInfo categories={categoriesFromServer}
+          onProductsChange={setSelectedProducts} />;
       case 3:
-    return  <SummaryPage data={{ formData, selectedProducts, categoriesFromServer }} />
+        return <SummaryPage data={{ formData, selectedProducts, categoriesFromServer }} />
 
 
       default:
@@ -200,8 +188,8 @@ useEffect(() => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}
-    dir="rtl"
-     >
+      dir="rtl"
+    >
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" sx={{ fontWeight: "bold", mb: 1, color: "#2d5555" }}>
@@ -212,15 +200,16 @@ useEffect(() => {
           </Typography>
         </Box>
 
-        <Stepper activeStep={activeStep} sx={{ mb: 4 ,
-         // This single line fixes the overflow issue
-   '& .MuiStepConnector-root': {
-      right: 'calc(-50% + 19px)',
-      left: 'calc(50% + 20px)',
-    }
-    //////////////////////here i changeddddddddddddd
-  }} 
-        alternativeLabel 
+        <Stepper activeStep={activeStep} sx={{
+          mb: 4,
+          // This single line fixes the overflow issue
+          '& .MuiStepConnector-root': {
+            right: 'calc(-50% + 19px)',
+            left: 'calc(50% + 20px)',
+          }
+          //////////////////////here i changeddddddddddddd
+        }}
+          alternativeLabel
         >
           {steps.map((step, index) => (
             <Step key={step.label}>
@@ -239,31 +228,26 @@ useEffect(() => {
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center", 
-                      // border: "none",
-                      // cursor: "pointer",
-                      // p: 0,
-                      // bgcolor: activeStep === index ? "#2d7d7d" : "#e0e0e0",
-                      // color: activeStep === index ? "white" : "#666",
-                    // Updated color logic:
-              bgcolor: index < activeStep 
-                ? "#7fb5a1"  // Green for completed steps
-                : activeStep === index 
-                  ? "#2d7d7d"  // Teal for current step
-                  : "#e0e0e0", // Gray for future steps
-              color: index <= activeStep ? "white" : "#666",
-              border: "none",
-              cursor: index < activeStep ? "pointer" : "default",
-              p: 0,
-              transition: "all 0.3s ease", // Smooth color transition
-              "&:hover": {
-                bgcolor: index < activeStep 
-                  ? "#45a049"  // Darker green on hover for completed
-                  : activeStep === index 
-                    ? "#1a5a5a"  // Darker teal on hover for current
-                    : "#e0e0e0", // No change for future steps
-                    },
-                     
+                      justifyContent: "center",
+                  
+                      bgcolor: index < activeStep
+                        ? "#7fb5a1"  
+                        : activeStep === index
+                          ? "#2d7d7d"  // Teal for current step
+                          : "#e0e0e0", // Gray for future steps
+                      color: index <= activeStep ? "white" : "#666",
+                      border: "none",
+                      cursor: index < activeStep ? "pointer" : "default",
+                      p: 0,
+                      transition: "all 0.3s ease", // Smooth color transition
+                      "&:hover": {
+                        bgcolor: index < activeStep
+                          ? "#45a049"  // Darker green on hover for completed
+                          : activeStep === index
+                            ? "#1a5a5a"  // Darker teal on hover for current
+                            : "#e0e0e0", // No change for future steps
+                      },
+
                     }}
                   >
                     {step.icon}
@@ -279,26 +263,12 @@ useEffect(() => {
         <Card sx={{ minHeight: 400, bgcolor: "#fafafa" }}>
           <CardContent sx={{ p: 4 }}>{renderStepContent()}</CardContent>
         </Card>
-        {/* <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-          <Button
-            onClick={handleNext}
-            variant="contained"
-            startIcon={<ArrowBack />}
-            sx={{
-              bgcolor: "#2d7d7d",
-              "&:hover": { bgcolor: "#1a5a5a" },
-              px: 4,
-              py: 1.5,
-              borderRadius: 25,
-            }}
-          >
-            {activeStep === steps.length - 1 ? "שלח בקשה" : "המשך"}
-          </Button>
-
+    
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
           <Button
             onClick={handleBack}
             variant="contained"
-            endIcon={<ArrowForward />}
+            startIcon={<ArrowForward sx={{ ml: 1 }} />}
             disabled={activeStep === 0}
             sx={{
               bgcolor: "#2d7d7d",
@@ -311,42 +281,22 @@ useEffect(() => {
           >
             חזור
           </Button>
-        </Box> */}
-<Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-  {/* Back button on the left */}
-  <Button
-    onClick={handleBack}
-    variant="contained"
-    startIcon={<ArrowForward sx={{ ml: 1 }}/>}
-    disabled={activeStep === 0}
-    sx={{
-      bgcolor: "#2d7d7d",
-      "&:hover": { bgcolor: "#1a5a5a" },
-      px: 4,
-      py: 1.5,
-      borderRadius: 25,
-      visibility: activeStep === 0 ? "hidden" : "visible",
-    }}
-  >
-    חזור
-  </Button>
 
-  {/* Next button on the right */}
-  <Button
-    onClick={handleNext}
-    variant="contained"
-    endIcon={<ArrowBack sx={{ mr: 1 }} />}
-    sx={{
-      bgcolor: "#2d7d7d",
-      "&:hover": { bgcolor: "#1a5a5a" },
-      px: 4,
-      py: 1.5,
-      borderRadius: 25,
-    }}
-  >
-    {activeStep === steps.length - 1 ? "שלח בקשה" : "המשך"}
-  </Button>
-</Box>
+          <Button
+            onClick={handleNext}
+            variant="contained"
+            endIcon={<ArrowBack sx={{ mr: 1 }} />}
+            sx={{
+              bgcolor: "#2d7d7d",
+              "&:hover": { bgcolor: "#1a5a5a" },
+              px: 4,
+              py: 1.5,
+              borderRadius: 25,
+            }}
+          >
+            {activeStep === steps.length - 1 ? "שלח בקשה" : "המשך"}
+          </Button>
+        </Box>
 
       </Paper>
     </Container>

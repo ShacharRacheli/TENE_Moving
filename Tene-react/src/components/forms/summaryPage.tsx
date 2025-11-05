@@ -1,6 +1,5 @@
 import { Box, Typography, Divider } from "@mui/material"
 import type { Category } from "./categoriesInfo"
-// import { categories, type Category } from "./categoriesPages/categoryData"
 
 interface SummaryPageProps {
   data: {
@@ -12,8 +11,7 @@ interface SummaryPageProps {
 }
 
 export default function SummaryPage({ data }: SummaryPageProps) {
-  // const { formData = {}, selectedProducts = {} } = data
-  // const allProducts = categories.flatMap(category => category.products)
+ 
 const { formData = {}, selectedProducts = {}, categoriesFromServer = [] } = data
 
 const allProducts = categoriesFromServer.flatMap(category => category.products)
@@ -51,21 +49,7 @@ const allProducts = categoriesFromServer.flatMap(category => category.products)
       <Typography variant="h6" gutterBottom>
         מוצרים שנבחרו:
       </Typography>
-{/* 
-      {Object.keys(selectedProducts).length === 0 ? (
-        <Typography>לא נבחרו מוצרים</Typography>
-      ) : (
-        <ul style={{ paddingRight: '20px' }}>
-          {Object.entries(selectedProducts).map(([productId, quantity]) => {
-            const product = allProducts.find(p => p.id === productId)
-            return (
-              <li key={productId}>
-                {product?.name || productId}: {quantity}
-              </li>
-            )
-          })}
-        </ul>
-      )} */}
+
       {Object.keys(selectedProducts).length === 0 ? (
   <Typography>לא נבחרו מוצרים</Typography>
 ) : (

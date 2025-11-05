@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,17 +60,26 @@ namespace Tene.Service.Services
                 var port = int.Parse(_configuration["EmailSettings:Port"]);
                 var senderEmail = _configuration["EmailSettings:SenderEmail"];
                 var senderPassword = _configuration["EmailSettings:SenderPassword"];
-
-                using var smtp = new SmtpClient(smtpServer)
+           
+                using var smtp = new SmtpClient("smtp.gmail.com")
                 {
-                    Port = port,
-                    Credentials = new System.Net.NetworkCredential(senderEmail, senderPassword),
-                    EnableSsl = true
+                    Port = 587,
+                    EnableSsl = true,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("hovalotin@gmail.com", "qekp zkxj ehvt ucsg")
                 };
+
+                //using var smtp = new SmtpClient(smtpServer)
+                //{
+                //    Port = port,
+                //    Credentials = new System.Net.NetworkCredential(senderEmail, senderPassword),
+                //    UseDefaultCredentials = false, // Important!
+                //    EnableSsl = true
+                //};
 
                 var mail = new MailMessage
                 {
-                    From = new MailAddress(senderEmail),
+                    From = new MailAddress("hovalotin@gmail.com"),
                     Subject = subject,
                     Body = body,
                     IsBodyHtml = true

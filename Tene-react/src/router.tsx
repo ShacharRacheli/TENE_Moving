@@ -8,14 +8,14 @@ import AdminProductPanel from "./components/admin/adminProductPanel";
 import PrivateRoute from "./privateRoute";
 
 export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <AppLayout />,
-        children: [
-            { index: true, element: <HomePage /> },
-            { path: '/about', element: <About/> },
-            // { path: '/sendRequest', element: <MovingDetailsForm/> },
-           {
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: '/about', element: <About /> },
+      // { path: '/sendRequest', element: <MovingDetailsForm/> },
+      {
         path: "sendRequest",
         element: <MovingDetailsForm />,
         children: [
@@ -27,15 +27,15 @@ export const router = createBrowserRouter([
         ],
       },
 
-            { path: '/admin', element: <AdminLogin/> },
-            // { path: '/', element: <AdminLogin/> },
+      { path: '/admin', element: <AdminLogin /> },
+      {
+        path: '/adminProductPanel', element: (
+          <PrivateRoute>
+            <AdminProductPanel />
+          </PrivateRoute>
+        ),
+      },
 
-            { path: '/adminProductPanel', element: (
-    <PrivateRoute>
-      <AdminProductPanel />
-    </PrivateRoute>
-  ),},
-          
-        ]
-    }
+    ]
+  }
 ])

@@ -22,11 +22,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { object, string } from "yup";
 
-
-const apiUrl = import.meta.env.VITE_APP_API_URL;
-console.log(apiUrl);
-
-
+const apiUrl = "http://localhost:5180";
 
 const schema = object({
   email: string().email("כתובת אימייל לא חוקית").required("יש להזין אימייל"),

@@ -63,12 +63,9 @@ namespace Tene.Service.Services
 
             var customerEmail = BuildCustomerEmail(fullRequest);
             var adminEmail =await BuildAdminEmail(fullRequest);
-            Console.WriteLine("===================================");
-            Console.WriteLine(customerEmail);
-            Console.WriteLine(adminEmail);
-            Console.WriteLine("===================================");
+
             await _emailService.SendEmailAsync(fullRequest.Email, "סיכום הזמנה - טנא הובלות", customerEmail);
-            await _emailService.SendEmailAsync("r0583237001@gmail.com", "הזמנה חדשה", adminEmail);
+            await _emailService.SendEmailAsync("hovalotin@gmail.com", "הזמנה חדשה", adminEmail);
 
             return true;
         }

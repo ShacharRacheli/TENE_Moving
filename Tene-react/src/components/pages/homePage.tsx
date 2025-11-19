@@ -127,8 +127,7 @@ export default function HomePage() {
                     }}
                     onClick={() => navigate("/sendRequest")}
                   >
-                    התחל עכשיו
-                  </Button>
+להשארת פרטים                  </Button>
                 </Box>
               </Grid>
             </Grid>

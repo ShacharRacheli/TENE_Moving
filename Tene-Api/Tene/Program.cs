@@ -50,7 +50,7 @@ namespace Tene
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowFrontend");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

@@ -49,7 +49,7 @@ namespace Tene.Controllers
             await _emailService.SendEmailAsync("hovalotin@gmail.com", subject, body);
 
             //await _requestService
-            return Ok();
+            return Ok("send succesfully");
 
         }
     }

@@ -1,8 +1,8 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import AppLayout from "./components/appLayout";
 import HomePage from "./components/pages/homePage";
 import About from "./components/pages/about";
-import MovingDetailsForm from "./components/forms/movingDetailsForm";
+// import MovingDetailsForm from "./components/forms/movingDetailsForm";
 import AdminLogin from "./components/admin/adminLogin";
 import AdminProductPanel from "./components/admin/adminProductPanel";
 import PrivateRoute from "./privateRoute";

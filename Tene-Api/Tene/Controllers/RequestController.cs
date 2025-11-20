@@ -13,18 +13,21 @@ namespace Tene.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-       private readonly IRequestService _requestService;
+        private readonly IRequestService _requestService;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public RequestController(IRequestService requestService,IMapper mapper)
+        public RequestController(IRequestService requestService, IMapper mapper, IEmailService emailService)
         {
             _requestService = requestService;
             _mapper = mapper;
+            _emailService = emailService;
         }
         [HttpPost]
         public async Task<IActionResult> AddNewRequest([FromBody] RequestDetailsDTO requestDto)
         {
-            if (requestDto == null) { 
+            if (requestDto == null)
+            {
                 return NotFound("Request details are required.");
             }
             var requestDetails = _mapper.Map<RequestDetails>(requestDto);
@@ -32,6 +35,21 @@ namespace Tene.Controllers
 
             //await _requestService
             return result ? Ok("Request added successfully.") : StatusCode(500, "An error occurred.");
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> ContactUs([FromBody] ContactUsDTO requestDto)
+        {
+            if (requestDto == null)
+            {
+                return NotFound("Request details are required.");
+            }
+            var subject = "צור קשר";
+            var body = $"שם מלא {requestDto.FullName} טלפון {requestDto.Phone} מייל {requestDto.Email} ";
+            await _emailService.SendEmailAsync("hovalotin@gmail.com", subject, body);
+
+            //await _requestService
+            return Ok();
 
         }
     }

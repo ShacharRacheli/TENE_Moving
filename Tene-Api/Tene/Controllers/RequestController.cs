@@ -37,7 +37,7 @@ namespace Tene.Controllers
             return result ? Ok("Request added successfully.") : StatusCode(500, "An error occurred.");
 
         }
-        [HttpPost]
+        [HttpPost("ContactUs")]
         public async Task<IActionResult> ContactUs([FromBody] ContactUsDTO requestDto)
         {
             if (requestDto == null)

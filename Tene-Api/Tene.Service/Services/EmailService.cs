@@ -56,11 +56,14 @@ namespace Tene.Service.Services
         {
             try
             {
-                var smtpServer = _configuration["EmailSettings:SmtpServer"];
-                var port = int.Parse(_configuration["EmailSettings:Port"]);
-                var senderEmail = _configuration["EmailSettings:SenderEmail"];
-                var senderPassword = _configuration["EmailSettings:SenderPassword"];
-           
+                //var smtpServer = _configuration["EmailSettings:SmtpServer"];
+                //var port = int.Parse(_configuration["EmailSettings:Port"]);
+                //var senderEmail = _configuration["EmailSettings:SenderEmail"];
+                //var senderPassword = _configuration["EmailSettings:SenderPassword"];
+                var smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
+                var port = int.Parse(Environment.GetEnvironmentVariable("PORT"));
+                var senderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL");
+                var senderPassword = Environment.GetEnvironmentVariable("SENDER_PASSWORD");
                 using var smtp = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,

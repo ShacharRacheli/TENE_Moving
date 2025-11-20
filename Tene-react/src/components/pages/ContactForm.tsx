@@ -134,17 +134,17 @@ export default function CustomerInfoPage() {
   fullName: data.fullName,
   email: data.email,
   phone: data.phone,
-  fromAddress: "N/A",
-  toAddress: "N/A",
-  fromFloor: 0,
-  toFloor: 0,
-  fromElevator: false,
-  toElevator: false,
-  moveDate: new Date().toISOString().split("T")[0], // או תאריך רלוונטי
-  products: [{ productId: 1, amount: 1 }], // לפחות מוצר אחד או ריק אם API מאפשר
+  // fromAddress: "N/A",
+  // toAddress: "N/A",
+  // fromFloor: 0,
+  // toFloor: 0,
+  // fromElevator: false,
+  // toElevator: false,
+  // moveDate: new Date().toISOString().split("T")[0], // או תאריך רלוונטי
+  // products: [{ productId: 1, amount: 1 }], // לפחות מוצר אחד או ריק אם API מאפשר
 };
 
-      await axios.post("http://localhost:5180/api/Request", payload, {
+      await axios.post("https://tene-moving-server.onrender.com/api/Request/ContactUs", payload, {
         headers: { "Content-Type": "application/json" },
       });
 

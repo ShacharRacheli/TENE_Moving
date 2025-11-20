@@ -162,7 +162,6 @@ export default function CustomerInfoPage() {
         <Typography variant="h4" mb={3} textAlign="center">
           פרטי לקוח
         </Typography>
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             label="שם מלא"

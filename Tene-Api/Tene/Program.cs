@@ -29,6 +29,17 @@ namespace Tene
             builder.Services.AddDbContext<DataContext>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddCors();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy
+                    //.WithOrigins("https://tene-moving.onrender.com")
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             var app = builder.Build();
 
@@ -39,8 +50,8 @@ namespace Tene
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

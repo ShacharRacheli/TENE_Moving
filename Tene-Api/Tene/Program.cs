@@ -46,8 +46,10 @@ new MySqlServerVersion(new Version(8, 0, 41))));
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
+            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

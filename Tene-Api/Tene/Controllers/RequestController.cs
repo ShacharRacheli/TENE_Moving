@@ -52,5 +52,10 @@ namespace Tene.Controllers
             return Ok("send succesfully");
 
         }
+        [HttpGet]
+        public string getHello()
+        {
+            return "hellooo";
+        }
     }
 }

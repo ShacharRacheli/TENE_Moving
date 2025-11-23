@@ -23,11 +23,13 @@ namespace Tene.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Tene");
-            //optionsBuilder.UseMySql("server=localhost;database=competition;user=root;password=Rs0583237001",
-            //    new MySqlServerVersion(new Version(8, 0, 21))); 
-        }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Tene");
+        //    //optionsBuilder.UseMySql("server=localhost;database=competition;user=root;password=Rs0583237001",
+        //    //    new MySqlServerVersion(new Version(8, 0, 21))); 
+        //}
     }
 }

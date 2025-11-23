@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Tene.Core;
 using Tene.Core.IRepositories;
 using Tene.Core.IServices;
@@ -26,21 +27,16 @@ namespace Tene
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddDbContext<DataContext>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            builder.Services.AddCors();
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowFrontend", policy =>
-                {
-                    policy
-                    //.WithOrigins("https://tene-moving.onrender.com")
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+            //builder.Services.AddDbContext<DataContext>();
+            builder.Services.AddDbContext<DataContext>(options =>
+//options.UseMySql(builder.Configuration["ConnectionStrings:DefaultConnection"],
+options.UseMySql(Environment.GetEnvironmentVariable("CONNECTION_STRING"),
+new MySqlServerVersion(new Version(8, 0, 41))));
 
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            builder.Services.AddCors();
+          
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -50,7 +46,7 @@ namespace Tene
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("AllowFrontend");
+            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

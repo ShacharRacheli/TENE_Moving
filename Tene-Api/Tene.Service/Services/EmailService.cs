@@ -79,7 +79,6 @@ namespace Tene.Service.Services
                 //    UseDefaultCredentials = false, // Important!
                 //    EnableSsl = true
                 //};
-
                 var mail = new MailMessage
                 {
                     From = new MailAddress("hovalotin@gmail.com"),

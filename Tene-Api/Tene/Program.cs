@@ -58,19 +58,20 @@ new MySqlServerVersion(new Version(8, 0, 41))));
 
             app.UseHttpsRedirection();
             //app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseRouting();
 
             app.UseCors("RenderPolicy");
 
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Method == "OPTIONS")
-                {
-                    context.Response.StatusCode = 200;
-                    await context.Response.CompleteAsync();
-                    return;
-                }
-                await next();
-            });
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Method == "OPTIONS")
+            //    {
+            //        context.Response.StatusCode = 200;
+            //        await context.Response.CompleteAsync();
+            //        return;
+            //    }
+            //    await next();
+            //});
 
             app.UseAuthentication();
             app.UseAuthorization();

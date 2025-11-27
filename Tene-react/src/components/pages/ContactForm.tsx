@@ -145,7 +145,7 @@ export default function CustomerInfoPage() {
 };
 
       await axios.post("https://tene-moving-server.onrender.com/api/Request/ContactUs", payload, {
-        headers: { "Content-Type": "application/json" },
+        // headers: { "Content-Type": "application/json" },
       });
 
       // מעבר לדף הצלחה

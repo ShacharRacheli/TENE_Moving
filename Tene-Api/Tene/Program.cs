@@ -56,8 +56,6 @@ new MySqlServerVersion(new Version(8, 0, 41))));
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-            //app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseRouting();
 
             app.UseCors("RenderPolicy");
@@ -78,12 +76,8 @@ new MySqlServerVersion(new Version(8, 0, 41))));
 
             app.MapControllers();
 
-            //app.UseAuthorization();
-
-
-            //app.MapControllers();
-
             app.Run();
+
         }
     }
 }

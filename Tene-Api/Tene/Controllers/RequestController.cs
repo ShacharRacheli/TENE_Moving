@@ -37,25 +37,25 @@ namespace Tene.Controllers
             return result ? Ok("Request added successfully.") : StatusCode(500, "An error occurred.");
 
         }
-        [HttpPost("ContactUs")]
-        public async Task<IActionResult> ContactUs([FromBody] ContactUsDTO requestDto)
-        {
-            if (requestDto == null)
-            {
-                return NotFound("Request details are required.");
-            }
-            var subject = "צור קשר";
-            var body = $"שם מלא {requestDto.FullName} טלפון {requestDto.Phone} מייל {requestDto.Email} ";
-            await _emailService.SendEmailAsync("hovalotin@gmail.com", subject, body);
+        //[HttpPost("ContactUs")]
+        //public async Task<IActionResult> ContactUs([FromBody] ContactUsDTO requestDto)
+        //{
+        //    if (requestDto == null)
+        //    {
+        //        return NotFound("Request details are required.");
+        //    }
+        //    var subject = "צור קשר";
+        //    var body = $"שם מלא {requestDto.FullName} טלפון {requestDto.Phone} מייל {requestDto.Email} ";
+        //    await _emailService.SendEmailAsync("hovalotin@gmail.com", subject, body);
 
-            //await _requestService
-            return Ok("send succesfully");
+        //    //await _requestService
+        //    return Ok("send succesfully");
 
-        }
-        [HttpGet]
-        public string getHello()
-        {
-            return "hellooo";
-        }
+        //}
+        //[HttpGet]
+        //public string getHello()
+        //{
+        //    return "hellooo";
+        //}
     }
 }

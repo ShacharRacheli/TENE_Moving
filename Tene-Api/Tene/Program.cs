@@ -35,8 +35,18 @@ new MySqlServerVersion(new Version(8, 0, 41))));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            builder.Services.AddCors();
-          
+            //builder.Services.AddCors();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("RenderPolicy", policy =>
+                {
+                    policy.WithOrigins("https://tene-moving.onrender.com")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,14 +57,30 @@ new MySqlServerVersion(new Version(8, 0, 41))));
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            
-            app.UseAuthentication();
+            //app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            app.UseCors("RenderPolicy");
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Method == "OPTIONS")
+                {
+                    context.Response.StatusCode = 200;
+                    await context.Response.CompleteAsync();
+                    return;
+                }
+                await next();
+            });
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            //app.UseAuthorization();
+
+
+            //app.MapControllers();
 
             app.Run();
         }
